@@ -34,7 +34,7 @@ const config = {
           showReadingTime: true,
           // Please change this to your repo.
           editUrl:
-            'https://github.com/ben-xD/orth.uk/website/',
+            'https://github.com/ben-xD/orth.uk/tree/main/website',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
