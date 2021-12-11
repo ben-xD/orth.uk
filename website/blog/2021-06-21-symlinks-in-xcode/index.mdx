@@ -1,0 +1,50 @@
+---
+title: 'A case against Symlinks in Xcode'
+authors: ben
+slug: symlinks-in-xcode
+description: 'A list of challenges you face when using Symlinks in Xcode'
+tags:
+  - Xcode
+  - Swift
+  - symlinks
+---
+
+I've seen a few *complaints* 😈 related to symlinks in Xcode dotted around the internet, but nothing put things into perspective as much as me trying to use symlinks in Xcode, myself. 
+
+> A small price to pay to avoid having to mess with symlinks which cause their own issues in Xcode * - [**Joe Susnick**](https://joesusnick.medium.com/swift-package-manager-with-a-mixed-swift-and-objective-c-project-part-2-2-e71dad234e6)*
+
+> The package no longer appears as a package within Xcode (icon is like a terminal-stamped file), and it's not built anymore. - *[**Raphael Sebbe**](https://forums.swift.org/t/symlink-to-spm-package-no-longer-builds-in-xcode-12-5-was-ok-on-12-4-earlier/47939)*
+
+<!--truncate-->
+
+## I wondered what Joe meant 🤔... 
+
+this might be why:
+- You cannot save the file in Xcode when you opened the file via its symlink. Developers might open the file in Xcode by clicking the symlink, since it appears to be a normal file. It's possible to open the file, edit it, but not to *save* it, you'll get the popup shown below. Once this happens, you also cannot edit the original file (via its original hardlink), because Xcode is storing the modified version of the symlink file. To resolve this, you need to force quit Xcode. It won't close normal (pressing the red/ close menubar item won't work).
+
+![CleanShot 2021-06-21 at 17 59 08](https://user-images.githubusercontent.com/24711048/122800047-624e9800-d2ba-11eb-96dd-84c94e75c826.png)
+
+- **Annoying popups**: Upon every rebuild after trying to save the file, you'll get this popups twice, one after the other.
+- **Xcode incremental builds fail: **Xcode doesn't know if the file (the one that the symlink points to) is **changed**. So the build won't work properly, because it won't recompile that file. It fools Xcode build system. Even after cleaning the project, I can't get it to recompile (even after restarting Xcode). The solution is to delete the symlink from not just the Xcode project, but the actual symlink, and re-create it. So when a user modified the header (even via the original file), the target which relies on the symlink version of the file will not notice, and so this file won't get recompiled. You have to clean the project/ build files `Product` > `Clean`.
+- **Mental overhead:** An Xcode project already has its own meaning of files: instead of directly using the directory structure, it has references, so you can put your files in any folder structure in Xcode. It's only visible inside Xcode. Putting another layer of indirection via symlinks adds another layer of indirection that developers have to think about. Keep your project structure simple.
+
+**TLDR:** Xcode gets **very** confused by symlinks, and if you're not convinced, I suggest you play around with symlinks in Xcode. For those who understand how to use Xcode with symlinks, its a pain to clean and rebuild (losing incremental builds) and a small bit of mental overhead to ensure you check you're editing a hardlink. For someone joining your project, its a booby trap. May Tim Cook help you 😅.
+
+## Why I was considering Symlinks
+
+I wanted to share code/ files between modules (targets) in a Swift Package, a question I posted on the [Swift forums](https://forums.swift.org/t/swift-packages-sharing-code-between-libraries-while-exposing-some-apis-from-the-shared-code/49605/2), and Swift doesn't compile if it detects 2 files being shared across 2 targets. Fortunately: 
+> I think you can trick SwiftPM using symlinks. - [**Jeremy David Giesbrechts**](https://github.com/SDGGiesbrecht)
+
+Though I was able to use symlinks in Xcode, Xcode did not treat me very well, with the problems I listed in this page. The other alternative is to save the shared file in module, and share that module between the modules that want to use it.
+
+## Another reason you might use Symlinks
+
+You want to move your header files into the `include/` in preparation for Swift Package Manager support for your Objective-C library. I recommend moving the files into the `include/` directory, instead of creating symlinks, to avoid the issues listed above. If you're looking for a great Swift Package to model your project structure on, look at [SGDCornerstone](https://github.com/SDGGiesbrecht/SDGCornerstone).
+
+## Why you shouldn't use hardlinks
+
+> hard links cannot be represented in git - [**Stack Overflow's Jakub Narębski**](https://stackoverflow.com/questions/3729278/git-and-hard-links)
+
+That should be enough. 😅
+
+PS: I used Xcode 13 beta.

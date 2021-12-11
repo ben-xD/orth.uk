@@ -1,0 +1,62 @@
+---
+title: 'Playing android sound on macOS'
+description: "Instructions on relaying music and sound from Android to your macOS"
+slug: android-macOS-sound-relay
+authors: ben
+tags:
+  - macOS
+  - sndcpy
+  - Android
+---
+
+## Why?
+
+You might want to play music or sounds running on Android phone on your macOS instead because your ears deserve better. In my case, I want to listen to the instructor playing on an Android app ([Fiit](https://fiit.tv/)) on my speakers. Romain Vimont, an inventor of popular and useful software is a hero once again, by making [`sndcpy`](https://github.com/rom1v/sndcpy).
+
+- Your Android device doesn't have an Audio jack...
+- Your speakers aren't bluetooth...
+- You don't want to use your headphones. 
+  - I do not want to sweat onto my headphones, or
+  - I want to share my music with others.
+- Your macOS is connected via AUX cable (or USB-C/HDMI) to speakers, so **let's use them**.
+
+<!--truncate-->
+
+## Pre-requisites
+
+- Command line experience, or just being resourceful.
+- `adb` installed and usable. To install, run `brew install android-platform-tools`
+- VLC installed in your `/Applications` folder: https://www.videolan.org/vlc/
+- Open Terminal.app (already installed at `/Applications/Utilities.Terminal.app`) or [iterm2](https://iterm2.com/)
+
+## Installation steps
+
+- Download the sndcpy APK and script from [rom1v/sndcpy on GitHub](https://github.com/rom1v/sndcpy), and place them in `/usr/local/bin`
+
+  - Unzip the file downloaded from Github and move them using `sudo mv -t /usr/local/bin ~/Downloads/sndcpy/sndcpy ~/Downloads/sndcpy/sndcpy.apk`
+  - This APK is installed to your android device whenever you run `sndcpy`
+
+- Create a script called `vlc` in `/usr/local/bin` by running `sudo vim /usr/local/bin/vlc`, and passing the following content:
+
+  - ```bash
+    /Applications/VLC.app/Contents/MacOS/VLC -I rc "$@"
+    ```
+
+  - The reason we put it in `/usr/local/bin` is that your mac will instantly be able to use it like a command, by calling `vlc` (once you restart the shell 🐚).
+
+  - Optional: Confirm the file contains those contents, by running `cat /usr/local/bin/vlc`
+
+- Make the file executable to you and the group: `sudo chmod 755 /usr/local/bin/vlc`
+
+- Add the following to your `~/.zshrc` so that `sndcpy` can get the APK whenever it wants to install it onto your device:
+
+  - ```
+    export SNDCPY_APK=/usr/local/bin/sndcpy.apk
+    ```
+
+- Restart your shell, or reload that file: `source ~/.zshrc`
+
+## Usage steps
+
+- Connect android device to computer (or attach it remotely via adb)
+- Run `sndcpy` in terminal

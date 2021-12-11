@@ -1,0 +1,78 @@
+---
+title: 'How/when Flutter runs on iOS and Android'
+authors: ben
+slug: how-flutter-runs
+description: "How does Flutter manage to run on iOS and Android?"
+tags:
+  - Flutter
+  - Android
+  - iOS
+---
+
+Being cross-platform, [Flutter](https://flutter.dev/) abstracts away Platform APIs, such as iOS, Android, Web, macOS, Windows and Linux. However, there are platform specific differences which will affect how you implement features or develop package plugins.
+
+For example, on iOS, you need to implement [`
+didReceive(_:completionHandler:)`](https://developer.apple.com/documentation/usernotificationsui/unnotificationcontentextension/1845197-didreceivenotificationresponse) in your app's main entrypoint (AppDelegate), where as on Android, you need to declare a Service or Broadcast Receiver in the `AndroidManifest.xml` file, and override [`FirebaseMessagingService`](https://firebase.google.com/docs/reference/android/com/google/firebase/messaging/FirebaseMessagingService) [`onMessageReceived`](https://firebase.google.com/docs/reference/android/com/google/firebase/messaging/FirebaseMessagingService#public-void-onmessagereceived-remotemessage-message) method.
+
+<!--truncate-->
+
+## Flutter always runs on iOS, but not on Android
+
+### iOS
+On iOS, your Flutter application always runs if a push notification (or background process) is running. This is because the `FlutterViewController` is initialized when the application launches, and this creates a FlutterEngine. 
+
+The `FlutterViewController` is declared in the `Main.storyboard` file, so _technically_ Flutter apps are Storyboard apps (very basic ones) 🤓. A Flutter Engine is created in the Objective-C++ file, [`FlutterViewController.mm`](https://github.com/flutter/engine/blob/master/shell/platform/darwin/ios/framework/Source/FlutterViewController.mm):
+```objective-c++
+auto engine = fml::scoped_nsobject<FlutterEngine>{[[FlutterEngine alloc]
+              initWithName:@"io.flutter"
+                    project:project
+    allowHeadlessExecution:self.engineAllowHeadlessExecution
+        restorationEnabled:[self restorationIdentifier] != nil]};
+```
+
+**Note:** this isn't Objective-C, it's Objective-C++. It has both verbose allocation/initiazation syntax and also uses C++ style class: [``](https://github.com/flutter/engine/blob/master/fml/platform/darwin/scoped_nsobject.h).
+
+```objective-c
+template <typename NST>
+class scoped_nsobject : public scoped_nsprotocol<NST*> {
+ public:
+  explicit scoped_nsobject(NST* object = nil) : scoped_nsprotocol<NST*>(object) {}
+
+  scoped_nsobject(const scoped_nsobject<NST>& that) : scoped_nsprotocol<NST*>(that) {}
+
+  template <typename NSU>
+  scoped_nsobject(const scoped_nsobject<NSU>& that) : scoped_nsprotocol<NST*>(that) {}
+
+  scoped_nsobject& operator=(const scoped_nsobject<NST>& that) {
+    scoped_nsprotocol<NST*>::operator=(that);
+    return *this;
+  }
+};
+```
+
+### Android
+
+On Android, only the component (e.g. Activity, Broadcast Receiver, Service) you declared runs, and the Flutter application doesn't **necessarily** run. The FlutterEngine is only automatically run if a `FlutterActivity` or `FlutterFragment` is used. For example, in `FlutterActivity`, it creates a `FlutterEngine` in the `onCreate` method. This means on Android, we need to launch _some kind of dart/ flutter code_ in the component if the FlutterEngine doesn't yet exist. There are 2 options:
+- Define. This was described in [Mahdi-Malv's answer on Stack Overflow](https://stackoverflow.com/a/60296798/7365866). This is also the approach of [firebase_messaging](https://pub.dev/packages/firebase_messaging), a Flutter library for push notifications. Take a look at those if you want to understand the approach. Or, you could:
+- Launch the original Flutter application. This is what I chose to do.
+You can do this in relatively few lines:
+```dart
+flutterEngine = new FlutterEngine(context, null);
+final MethodChannel methodChannel = new MethodChannel(executor.getBinaryMessenger(), methodChannelName, new StandardMethodCodec(new AblyMessageCodec()));
+methodChannel.setMethodCallHandler(this);
+// Get and launch the users app isolate manually:
+flutterEngine.getDartExecutor().executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault());
+// Even though lifecycle parameter is @NonNull, the implementation `FlutterEngineConnectionRegistry`
+// does not use it, because it was only meant to be exposed for testing framework. See https://github.com/flutter/flutter/issues/90316
+flutterEngine.getBroadcastReceiverControlSurface().attachToBroadcastReceiver(receiver, null);
+```
+
+Once you do this, you'll [need the Flutter application to inform the Android side](https://github.com/flutter/flutter/issues/90182#issuecomment-924158973) that the dart side is ready to receive data being sent the Android side. This is because there is no way for the Android side to determine when the FlutterEngine/Isolate/Flutter app is ready.
+
+I'll stop there. Try to understand the following things by reading code, preferably cloning the repo and navigating the code using an IDE (Android Studio, Xcode and AppCode, rather than VSCode for this kind of code):
+- Understand implementation details for launching the Flutter application: Invoking methods between Dart and Platform side, and passing data. Drawing a diagram on paper would help. You can start with [Firebase Messaging's `FlutterFirebaseMessagingBackgroundExecutor.java`](https://github.com/FirebaseExtended/flutterfire/blob/master/packages/firebase_messaging/firebase_messaging/android/src/main/java/io/flutter/plugins/firebase/messaging/FlutterFirebaseMessagingBackgroundExecutor.java). Then you could take a look at my simpler implementation in [ably_flutter](https://github.com/ably/ably-flutter/pull/166).
+- How FlutterEngine works internally with the Platform shell: `FlutterViewController`, `FlutterJNI`, etc. You should clone [`flutter/engine`](https://github.com/flutter/engine).
+  - On Android, start with: `FlutterActivity` and then `FlutterActivityAndFragmentDelegate`.
+  - On iOS, start with `FlutterViewController.mm`.
+
+Feel free to ask questions in the comments below :)

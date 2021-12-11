@@ -1,0 +1,79 @@
+---
+title: 'Using Cloudflare Products for 2 years'
+authors: ben
+slug: 'cloudflare'
+description: 'Cloudflare provides a generous free tier for many of their useful products, but there are some downsides even when working at small-scale.'
+tags:
+  - Cloudflare
+  - Netlify
+  - Cloudflare Workers
+  - Firebase Functions
+---
+
+Cloudflare provides a generous free tier for many of their useful products. I list them below (and will keep them updated as I use more). Some products do have some downsides **during development**, even when working at _small_-scale. I'm happy to say I overcame them, and want you to help you do the same.
+
+**⚠️ Warning ⚠️:** This page also includes random technical details to help you solve issues. ⚠️
+
+<!--truncate-->
+
+## Cloudflare DNS
+
+- The DNS records propagate globally within seconds, so you won't second guess your DNS configuration.
+- The UI is much better than competing services for simple tasks like mine (e.g. AWS Route53, and other common registrars like GoDaddy, Namecheap).
+  - Though, the Cloudflare DNS UI will probably get quite hectic if I had any more DNS records.
+  - PS: I recommend [nuttyabouthosting.co.uk](nuttyabouthosting.co.uk) if want a `.uk` or `.co.uk` domain), instead of GoDaddy. Great domain prices, and it just works.
+
+## Cloudflare Pages vs Netlify
+
+Switching from Netlify to Cloudflare Pages brings 2 main benefits:
+
+- Cloudflare pages provides **free web analytics**, which allows you to see where your users are coming and if they are `GoogleBot` or not.
+- Better **integration** with other products. Its nice to reduce the number of companies I use (and will potentially pay for): I can use Cloudflare Workers, Cloudflare DNS/ Registrar, Cloudflare Workers, and I generally find more Cloudflare feature more valuable, so I'll be using more of them in the future.
+
+## Cloudflare Workers vs Firebase Cloud Functions (or AWS Lambda)
+
+- Cloudflare workers might seem like the normal serverless functions we've heard about, like Vercel, Google/ Firebase Cloud Functions, AWS Lambda and Azure Functions are selling.
+
+- However, Cloudflare Workers' runtime is more restrictive. This might mean Cloudflare Workers are much cheaper and faster to run at scale, but I won't dig into performance today.
+
+  - They are Javascript only, to run other languages you **need** to use WebAssembly. Other platforms allow you to run pretty much run anything: Google offers [Cloud Run](https://cloud.google.com/run/) to run serverless containers, and Lambda allows [custom runtimes](https://docs.aws.amazon.com/lambda/latest/dg/runtimes-custom.html) to allow you to run anything you want.
+
+  - Cloudflare workers runs as a **Service Worker** (in a V8 isolate), not as a NodeJS application or a browser application. Some libraries don't support this very well, and so this limits the use of Cloudflare Workers. For example, `XMLHttpRequest` doesn't work. This is different to other serverless products, which run in NodeJS. The reason why Cloudflare uses Service Workers and not NodeJS is to run in V8 isolates for "scale, security and speed". See Kenton Varda's [talk](https://www.youtube.com/watch?v=HK04UxENH10) for more.
+
+    - Service Workers are specialised typed of Web Workers, specifically designed to allow intercepting network requests to act as a cache/ proxy. This allows offline use. Web Workers only have a smaller set of APIs, which won't allow you to intercept network requests, and is more designed to run Javascript off the main thread.
+
+    - Whats the difference between a Service Worker and a Web Worker?
+
+      - Web Worker: General work done off the main thread.
+
+      - Service Worker: A special purpose runtime which is a proxy between the browser and the server. Service Workers have extra APIs for intercepting network requests. Because Cloudflare Workers intercept network requests that are incoming to a domain, they kind of fit the service worker model.
+
+      - Webpack uses the same target (`webworker`) for both of them
+
+      - From client/ browser apps, you pass messages to it using `window.postMessage()`
+
+- Billing experience: Cloudflare Functions do not bill when the CPU is not running: i.e. It is free when you're making a network request in the cloudflare worker and waiting for the promise to return. This is different to Google Cloud/ Firebase pricing, which will definitely be more expensive:
+
+  > Compute time is measured from the time your function receives a request **to the time it completes**, either through you signaling completion, or through a timeout, other failure or any other termination.
+
+- The debugging experience is relatively poor: you cannot set breakpoints, run it locally, and the error messages are not that helpful. I recommend [cfworker](https://github.com/cfworker/cfworker) to improve the normal Cloudflare debugging experience though. My example repo which uses Ably in a Cloudflare Worker, including helpful ways to debug (e.g. `cfworker`) exists [here](https://github.com/ben-xD/ably-cloudflare-workers).
+
+  - e.g. Running `wrangler dev` might not give you any errors. You should first try to publish the worker using `wrangler publish`, fix the errors and confirm it works. Then `wrangler dev` will work.
+  - Cloudflare's free TLS/SSL certs only cover the apex (orth.uk) and 1 subdomain (club2d.orth.uk). So `api.club2d.orth.uk` doesn't get a valid SSL cert. Thanks `The Freelancer ;)` on Discord again. So I solved this by using the default worker domain, i.e. `worker_name.your_worker_subdomain.workers.dev`, which doesn't have this problem.
+  - Environment variables specified in `wrangler.toml` or the cloudflare website will be accessible as global variables, not through `process.env.VAR_NAME`, but just `VAR_NAME`. This is confusing, because if you're using typescript, you need to ignore the warning like so:
+
+```js
+// @ts-ignore
+console.warn(`api key is ${ABLY_PRIVATE_API_KEY}`);
+```
+
+- You need a DNS record pointing to the cloudflare worker route. i.e. If you want your worker to work at call.orth.uk, you need to explicitly set call.orth.uk to have a DNS record with Cloudflare _proxying_ it. Erisa on the Cloudflare Workers discord suggested setting a `AAAA` record to `100::`, and that worked great. The Workers dashboard does not notify you of any of this, but the documentation does.
+- **Conclusion:** To speed up development I moved my project's serverless function (I only had 1 😅) to firebase functions, mainly because of the poor development experience/ difficult debugging. I did get around to fixing my Cloudflare Worker, so there is no fundamental flaw with Cloudflare.
+
+## Cloudflare Community
+
+Join the cloudflare discord to get for support from really helpful Cloudflare people. The community is very helpful, and they've saved me a lot of time in debugging my Cloudflare Workers. However, with other platforms, I hardly needed to debug anything.
+
+## Question for you
+
+Which Cloudflare products are you using or considering using? What other options are you looking at?

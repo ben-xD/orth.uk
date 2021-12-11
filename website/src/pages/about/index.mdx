@@ -1,0 +1,81 @@
+---
+title: About
+slug: '/about'
+authors: ben
+---
+
+### Professional
+
+I'm constantly learning. I invest in myself, developer tooling and the products that I work on. Simplicity / encapsulating complexity, developer experience and user experience are important.
+
+<!-- - **<a target="_blank" href={require('./cv.pdf').default}>CV</a>** -->
+- [**CV**](https://orth.uk/cv.pdf)
+- [**LinkedIn**](https://www.linkedin.com/in/bbutterworth/)
+- [**Stack Overflow**](https://stackoverflow.com/users/7365866/ben-butterworth?tab=profile):
+
+<a href='https://stackoverflow.com/users/7365866/ben-butterworth'>
+  <img
+    src={'https://stackoverflow.com/users/flair/7365866.png?theme=clean'}
+    width={208}
+    height={58}
+    alt='profile for Ben Butterworth at Stack Overflow, Q&A for professional and enthusiast programmers'
+    title='profile for Ben Butterworth at Stack Overflow, Q&A for professional and enthusiast programmers'
+  />
+</a>
+
+### Technologies I have used (recent first):
+
+I actually started off as a designer, not an engineer or programmer. Some of my ideas/contributions can be found in luxury hotel rooms around the world (but also not so luxurious hotels), and in the back of camping vehicles in Australia 😅.
+
+- **[Flutter](https://flutter.dev/)**, [**iOS**](https://developer.apple.com/) and [**Android**](https://developer.android.com/): Though I've used Flutter on-and-off since 2020, I've been building a Flutter package plugin, [ably_flutter](https://github.com/ably/ably-flutter) containing a lot of Android and iOS code. It was nice to learn some Objective-C, but I've already begun the migration to Swift 😂. Recently, I've added push notification support, allowing users to register the device for push notifications, and handle everything on the Dart side without writing native code: handling foreground messages, background messages and notification taps / app launches. This was more complicated than expected, since I had to launch a Flutter Engine when the message arrives on Android. 
+- **[Three.js](https://threejs.org/), [NextJS](https://nextjs.org/)/[React](https://reactjs.org/), WebSockets/[Ably](https://ably.com/), [MediaPipe](https://www.mediapipe.dev/), [TailwindCSS](https://tailwindcss.com/):** I learnt these while making [Club2d](/club2d), an anonymous video calling app.
+- **iOS (Swift) and Android:** Android and iOS development are both enjoyable in their own ways. I've also built a macOS CLI tool for colleagues, some prototype apps using CoreML (iOS) and Tensorflow Lite (Android). I've been compiling a list of differences which I'll publish soon. Currently working on an iOS library for Ably. I've also touched a small bit Objective-C, though I highly recommend you stick to Swift if possible.
+- 🤯😻 **Flutter & Tensorflow since April 2020:** In Flutter, I've accumulated 100+ hours now, and I'm loving the type system. I've also been working on my user interface designs, from sketching, wireframing and mocking. On top of normal UI design, I am currently designing a novel user experience as part of my Master's individual project, for physiotherapy patients and computer vision. I have now made a few smaller apps in Flutter. For my final project at Imperial, I am researching <a href="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcvlab.epfl.ch%2Fwp-content%2Fuploads%2F2018%2F08%2Fposeest.png&f=1&nofb=1" target="_blank">3D pose estimation</a> and computer vision and baking it into an app with <a href="http://flutter.dev/" target="_blank">Flutter</a>. In 2021, I became a TensorFlow certified developer.
+- **😲 Gatsby, React, HTML and CSS:** We needed a landing page for Foodprint, so I quickly learnt these tools to make [Foodprint](http://foodprint.orth.uk/). ~~I'll be using Next.JS instead of Gatsby if I ever need another landing page.~~ Although Gatsby was frustrating, it provides a lot of web performance and tools out of the box.
+- **React Native 🤗/Typescript 😎 in late 2019:** I picked up React Native over Christmas 2019, and am now productive in Typescript & React Native, check out [Foodprint](http://foodprint.orth.uk/).
+- 🏃‍♂️🤠 **[Rust](https://www.rust-lang.org/):** Alongside C++, I read the [rust book](https://doc.rust-lang.org/stable/book/), but didn't manage to build any complicated programs. So much for getting stuck in! I've decided to build more user facing programs, but won't hesitate to use Rust if I need performance.
+- 💪 **C++ for 3 months in late 2019:**
+  - Imperial'S C++ intensive course (where I learnt real programming skills, thanks to Will Knottenbelt and Fidelis Perkonigg). I got 85% in the exam 😥 and 84% in courseworks on average.
+  - This course taught me to be pragmatic, and to read the documentation 😍. It taught me to do things without watching courses and videos, and just get stuck in. I recommend the same.
+- 🥰 **Javascript throughout 2019:** learning javascript basics and writing scripts in my free time
+- 😡 **Java for 7 months in early 2019:** As part of on-boarding at Ocado & day to day programming. I didn't enjoy Java. Maybe it was because of the enterprise programming & boilerplate.
+- 😃 **Python & Javascript & NodeJS for 6 months in late 2018:** Self-taught to make web apps. Finally, I was actually programming. In reality I was just following tutorials and could not make anything myself... So much for [deliberate practice](https://jamesclear.com/deliberate-practice-theory).
+- My first real tool I learnt was **Adobe Photoshop & Illustrator**, mostly to draw illustrations and posters. I started when I was 11.
+- 🙂 **Python for about 6 months.**
+  - in 2017: Self-taught to do data analysis for simulation results
+  - in 2018: Self-taught for final year project data analysis for simulation results
+- **Matlab for about 3 months 😭 in 2014, 2015, 2016...**
+  - ...in undergraduate Matlab courses, and several simulation projects. I really did not enjoy Matlab, and know many students who were scared away from programming because of it. Do yourself a favour, don't touch that thing. Use the right tool for the job: in Science, that's Python now, not Matlab.
+
+### Devops related platforms I have used (recent first):
+
+- Firebase & GCP - Mobile app backend as a service (authentication, database, cloud functions), including Firebase security rules and application threat modeling.
+- Doc Cloud: The Imperial College Department of Computing Cloud. It's got limitations no amount of money can circumvent. Might be a good thing for my wallet.
+- Netlify, Vercel, Cloudflare Pages - hosting my blog and other small web app projects
+- Terraform - Deployed AWS & Cloudflare resources for a project. And very soon killed the project with `tf destroy` 🤣. At least I can redeploy it with `tf deploy`.
+- Cloudflare DNS - They update their DNS records almost immediately when you make a change. So TTL does not matter, mostly 😇.
+- AWS EC2, Lambdas - I used to use Lambdas for email forwarding. I also used EC2 it to some extent when working at Ocado. I've also explored Openfaas and Knative, but I don't want to pay for Kubernetes cluster.
+- Heroku - The tool that shows up a lot in front of beginners. ~~I soon outgrew this.~~ I just realised there are some really good websites hosted on heroku.
+
+### Personal
+
+I am vegan 🥕, love animals, nature and the outdoors. Contact me if you have similar interests or are solving solve interesting and impactful problems, I'd love to help.
+
+### Contact
+
+`final bensEmailAddress = "ben" + "@orth.uk";`
+
+```dart
+if (isInterestedInBuildingCoolThings || isInterestedInSolvingImportantIssues) {
+  final transport = new SmtpTransport(options);
+  final envelope = Envelope()
+    ..from = 'you@domain.com'
+    ..from = 'Orth.uk Visitor'
+    ..recipients = [bensEmailAddress]
+    ..subject = 'Hey 👋'
+    ..text = "How's it going? 😃";
+  
+  await transport.send(envelope)
+  print("Email sent to $bensEmailAddress")
+}
+```

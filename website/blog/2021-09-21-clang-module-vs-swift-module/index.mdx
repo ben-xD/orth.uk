@@ -1,0 +1,37 @@
+---
+title: 'What is the difference between a clang (C++, Objective-C, C) module and a Swift module?'
+authors: ben
+slug: clang-module-vs-swift-module
+tags:
+  - Clang
+  - Swift
+---
+
+*They are different.* At the end of the build process though, they both need to be linked to your application/ library's other `.o` and `.dylib` files for it to run.
+
+<!--truncate-->
+
+### Swift modules
+
+- [From Swift Serialization.md docs](https://github.com/apple/swift/blob/main/docs/Serialization.md):
+  > The fundamental unit of distribution for Swift code is a module. A module contains declarations as an interface for clients to write code against. 
+- [Swift acccess control docs](https://docs.swift.org/swift-book/LanguageGuide/AccessControl.html): 
+  > A module is a single unit of code distribution: a framework or application that’s built and shipped as a single unit and that can be imported by another module with Swift’s import keyword.
+
+- Configured by `.target()`'s in `Package.swift`
+- Cannot have submodules, so users cannot `import Module.Submodule` in Swift. Users can still import specific entities, `import struct PackageModel.Manifest`, but this is a lot more verbose than importing submodules.
+- Its interface exists as a `.swiftmodule`. [What is a .`swiftmodule`?](https://forums.swift.org/t/whats-in-the-file-of-swiftmodule-how-to-open-it/1032). The [documentation](https://github.com/apple/swift/blob/main/docs/Serialization.md) says: 
+  >  Conceptually, the file containing the interface for a module serves much the same purpose as the collection of C header files for a particular library.
+- > The compiler produces this `.swiftmodule` file a lot, like a generated objective-C header, but instead of text, its a binary repesentation. It includes the bodies of inlinable functions, much like static inline functions in objective-C or header implementations in C++. However, Swift modules does include the names and types of private declarations. This allows you to refer to them in the debugger, but it does mean you shouldn't name a private variable after your deepest darkest secret. [from WWDC 2018: Behind the Scenes of the Xcode Build Process](https://developer.apple.com/videos/play/wwdc2018/415/)
+  - So private declarations are exposed in your `.swiftmodule` (Swift module interface).
+- When importing pure Objective-C frameworks into Swift, the Swift compiler uses its built-in clang compiler to import an Objective-C header. 
+> The importer finds declarations in the headers exposed in Clangs `.modulemap` for that framework. (again, from WWDC2018)
+- When importing Objective-C + Swift frameworks into Swift, the Swift compiler uses the Umbrella header.
+
+# Clang modules
+- Configured by `YourModuleName.modulemap` file (previously `module.map`, but this is deprecated), formatted like [this](https://clang.llvm.org/docs/Modules.html#module-map-language)
+- Can have submodules, e.g. `std` module has `std.io` and `std.complex`.
+- A clang module exposes header files specified in the module map. Private details (in `.m`) are not exposed at all. 
+- Is an improvement of the original `#include` or `#import` style imports to improve the build process (This is a big topic, read the [Clang module docs](https://clang.llvm.org/docs/Modules.html#introduction)).
+
+> I originally posted this question and answer on Stack Overflow [here](https://stackoverflow.com/questions/68055447/what-is-the-difference-between-a-clang-objective-c-module-and-a-swift-module). I had to do some digging and reading for this one.

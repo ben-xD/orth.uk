@@ -1,0 +1,51 @@
+---
+title: 'Setting up Java on macOS'
+authors: ben
+slug: 'java-on-macOS'
+description: 'Set up multiple JDKs from different sources easily.'
+tags:
+  - Software engineering
+  - Java
+---
+
+## Motivation
+
+Setting up Java/ `JAVA_HOME` happens infrequently enough that I forgot how to do it efficiently, but frequent enough that it is annoying. 
+
+<!--truncate-->
+
+## Problem?
+
+I noticed [MKYong's method](https://mkyong.com/java/how-to-install-java-on-mac-osx/) uses brew to install java JDK versions (recommended by OpenJDK) and then sets `JAVA_HOME` explicitly. He doesn't use `jenv` because of "simplicity and no black box magic". MKYong modifies `JAVA_HOME` to change the java version, and this will hide all other JAVA versions from being listed in `/usr/libexec/java_home -V`. Also, if that path is broken, no versions show up. I suggest not modifying `JAVA_HOME`, because in a few months when you want to switch your java version, `java_home` will still show you which versions you have on your machine.
+
+## [jenv](https://github.com/jenv/jenv) does 2 things
+
+It allows switching between Java versions and sets `JAVA_HOME` for you. You can just read `jenv`'s Getting Started Guide now, but I've written the rest for my convenience, since I've set up too many machines this year (e.g. M1 Mac Mini, Intel i7 Hackintosh, MacBook Pro 16" from [Popsa](https://popsa.com/) and my personal Intel MacBook Pro 13").
+
+## Steps
+
+ - Ensure Homebrew is [installed](https://docs.brew.sh/Installation)
+ - Run `brew install --cask adoptopenjdk`. Optional: read/ understand the [AdoptOpenJDK homebrew tap](https://github.com/AdoptOpenJDK/homebrew-openjdk) 
+ - Add the tap so you can also install other versions of Java: `brew tap AdoptOpenJDK/openjdk`
+ - Install the version of Java you want: `brew install --cask adoptopenjdk11` or with any [other](https://github.com/AdoptOpenJDK/homebrew-openjdk) version you want.
+ - Warning: DO NOT modify JAVA_HOME yourself, because that is what `jenv` will do. If you're updating an older system, get rid of your old code, e.g. `export JAVA_HOME=...` from your `.bash_profile`, `.zprofile`, `.zshrc`, or wherever you might have put it.
+ - Install `jenv`: `brew install jenv`, and follow its output: it should say copy some lines into a configuration file.
+ - `mkdir -p ~/.jenv/versions`, to prepare the folders for jenv to work properly. This is a workaround for a [bug](https://github.com/jenv/jenv/issues/167).
+   - The bug: When trying to add a JAVA version to jenv using e.g. `jenv add adoptopenjdk-16.jdk/Contents/Home`, you'll get `ln: /Users/zen/.jenv/versions/openjdk64-16.0.1: No such file or directory`.
+- `jenv add /Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home`, remember to modify the path for your specific version. Notice the `Contents/Home` subdirectory.
+ - Add more JDKs, for example for JDK15:jenv v
+  - `brew install --cask adoptopenjdk15`
+  - `jenv add /Library/Java/JavaVirtualMachines/adoptopenjdk-15.jdk/Contents/Home/`
+
+ - `jenv versions` to list all JDKs
+ - `jenv global jdk_name` to set a specific JDK, which also sets the JAVA_HOME variable for you. Check it with `echo $JAVA_HOME`. I prefer to run `jenv global 15`.
+11. `java --version` should show the version you just set:
+```
+openjdk 15.0.2 2021-01-19
+OpenJDK Runtime Environment AdoptOpenJDK (build 15.0.2+7)
+OpenJDK 64-Bit Server VM AdoptOpenJDK (build 15.0.2+7, mixed mode, sharing)
+```
+
+# Conclusion
+
+After finding `jenv`, I know I won't be running into setting up Java anymore. I highly recommend it.

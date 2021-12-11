@@ -1,0 +1,162 @@
+// @ts-check
+// Note: type annotations allow type checking and IDEs autocompletion
+
+const lightCodeTheme = require('prism-react-renderer/themes/github');
+const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+
+/** @type {import('@docusaurus/types').Config} */
+const config = {
+  title: 'Ben Butterworth',
+  tagline: 'Your life is purchased by where you spend your attention.',
+  url: 'https://orth.uk',
+  baseUrl: '/',
+  onBrokenLinks: 'throw',
+  onBrokenMarkdownLinks: 'warn',
+  favicon: 'img/favicon.ico',
+  organizationName: 'Ben-xD', // Usually your GitHub org/user name.
+  projectName: 'blog-v2', // Usually your repo name.
+
+  presets: [
+    [
+      'classic',
+      /** @type {import('@docusaurus/preset-classic').Options} */
+      ({
+        // docs: {
+        //   sidebarPath: require.resolve('./sidebars.js'),
+        //   editUrl: 'https://github.com/ben-xD/blog-v2',
+        // },
+        blog: {
+          path: './blog',
+          routeBasePath: '/',
+          blogSidebarTitle: 'All posts',
+          blogSidebarCount: 'ALL',
+          showReadingTime: true,
+          // Please change this to your repo.
+          editUrl:
+            'https://github.com/ben-xD/blog-v2/website/blog',
+        },
+        theme: {
+          customCss: require.resolve('./src/css/custom.css'),
+        },
+      }),
+    ],
+  ],
+
+  themeConfig:
+    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+    ({
+      navbar: {
+        title: 'Ben Butterworth',
+        logo: {
+          alt: 'Site Logo',
+          src: 'img/logo.svg',
+        },
+        items: [
+          // {to: '/blog', label: 'Blog', position: 'left'},
+          // {
+          //   type: 'doc',
+          //   docId: 'intro',
+          //   position: 'left',
+          //   label: 'Guides',
+          // },
+          {to: '/about', label: 'About', position: 'left'},
+          {to: '/projects', label: 'Projects', position: 'left'},
+          {
+            label: 'Twitter',
+            href: 'https://twitter.com/orth_uk',
+            position: 'right',
+          },
+          {
+            label: 'LinkedIn',
+            href: 'https://www.linkedin.com/in/bbutterworth/',
+            position: 'right',
+          },
+          {
+            label: 'Stack Overflow',
+            href: 'https://stackoverflow.com/users/7365866/ben-butterworth',
+            position: 'right',
+          },
+          {
+            href: 'https://github.com/ben-xD',
+            label: 'GitHub',
+            position: 'right',
+          },
+        ],
+      },
+      footer: {
+        style: 'dark',
+        links: [
+          {
+            title: 'Navigation',
+            items: [
+              {
+                label: 'Blog',
+                to: '/',
+              },
+              {
+                label: 'Blog Archive',
+                to: '/archive',
+              },
+              {
+                label: 'About',
+                to: '/about',
+              },
+              {
+                label: 'Projects',
+                to: '/projects',
+              },
+            ],
+          },
+          {
+            title: 'Profiles',
+            items: [
+              {
+                label: 'Twitter',
+                href: 'https://twitter.com/orth_uk',
+              },
+              {
+                label: 'LinkedIn',
+                href: 'https://www.linkedin.com/in/bbutterworth/',
+              },
+              {
+                label: 'Stack Overflow',
+                href: 'https://stackoverflow.com/users/7365866/ben-butterworth',
+              },
+              {
+                label: 'GitHub',
+                href: 'https://github.com/ben-xD',
+              },
+            ],
+          },
+          {
+            title: 'Favourite websites, projects and tools',
+            items: [
+              {
+                label: 'High Scalability',
+                href: 'http://highscalability.com/',
+              },
+              {
+                label: 'Hacker News',
+                href: 'http://news.ycombinator.com/',
+              },
+              {
+                label: 'Flutter',
+                href: 'https://flutter.dev/'
+              },
+              {
+                label: 'Figma',
+                href: 'http://figma.com'
+              }
+            ],
+          },
+        ],
+        copyright: `Copyright © ${new Date().getFullYear()} Ben Butterworth`,
+      },
+      prism: {
+        theme: lightCodeTheme,
+        darkTheme: darkCodeTheme,
+      },
+    }),
+};
+
+module.exports = config;

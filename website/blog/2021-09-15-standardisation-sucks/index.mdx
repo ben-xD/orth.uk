@@ -1,0 +1,47 @@
+---
+title: 'The issue with standardisation'
+authors: ben
+slug: standardisation-sucks
+description: "Bad standards are easy to add, but expensive to maintain. Good standards are hard to add, but saves money."
+tags:
+  - Software Engineering
+---
+
+I work in a team that manages far more software libraries than there are people. I wanted to raise my concern about **standardisation** across projects/ libraries (e.g. readmes, tools, github workflow file naming conventions). For example, synchronizing all the projects to have:
+
+<!--truncate-->
+
+- the same README structure/ template.
+- using [ASDF](https://asdf-vm.com/), a new runtime manager tool for as many libraries as possible, instead of using [rbenv](https://github.com/rbenv/rbenv), [nvm](https://github.com/nvm-sh/nvm). 
+- Calling any CI workflow `check.yaml` if they are related to tests, static analysis, unit tests or integrations tests.
+- Sharing the same features between all libraries.
+- Sharing the same API/ interface between all libraries.
+- Sharing an **implementation guide/ document**, where all developers are required to implement features in the exact same way, including testing their applications in the same way. 
+
+## Benefits/ costs
+
+What are the benefits (and costs) of doing these things? An engineer did create these, so there's is actually a benefit to considering them. Generally, it avoids "duplicate" thinking (dummy-proofing).
+- The README will be more familiar to people (developers, customers) as they move between projects. 
+  - Cost: No README is perfect, and structure is part of that. Developers should feel free to structure the README. Additionally, if a documentation site is created for one library in particular, we might nuke the README completely. A developer will second guess adding a section that they believe is important. If they want to improve the structure by removing a useless section or make structural changes to the README, they might choose to seek permission from the standard setter, or I predict, make no improvements to the docs (accept the fate, and give up).
+- Using `asdf`: Developers can easily drop in and out of SDKs (mercenary style) and run the runtimes. 
+  - Cost: Of course, using an uncommon lowest common denominator tool might bring use outdated runtimes/ have bugs/ worse developer experience. Node version manager, and `Ruby` are tools designed specifically for that runtime, are already established. 
+- Calling any CI workflow file: `check.yaml`: 
+  - Cost: Each workflow should have a meaningful name. If there are 2 workflows, one for unit tests, and the other for integration tests, it would ideally be clear from the filename itself.
+
+It can be detrimental and restrict the improvement/ growth than each repo/ project can make, compared to if repos didn’t have this standardisation cost. Developers have to “argue” their case for breaking the standard, when the standard was never justified very well or discussed. IMHO there are much more important things to think about. 
+ 
+Once the decision is made to create a standard, there might still be a cost to design a standard that is suitable. For example, if creating a consistent README structure, work has to be done to create a suitable README that fits all libraries. Problem alert?: This structure might be the lowest common denominator or contain unnecessary sections.
+
+When a standard is put in place, you'll find lots of things that *don't* conform to the standard. I've noticed my team lead who has many years of development experience working on this type of non-technical work. Apart from this synchronising cost between libraries when the standard is first enacted/ discovered, I think there is a hidden, but much greater cost of maintaining this synchronicity. Developers are restricted in choosing their tools or an approach in their project, which [makes the process dummy-proof](https://www.gsb.stanford.edu/insights/netflix-founder-reed-hastings-make-few-decisions-possible). Reed Hasting's (Netflix founder) says "if you dummy-proof the process, you only get dummies to work there". Importantly, when a new tool or technology comes out, we’d be stuck with a standard, and the onus is on the developer to argue the case. A huge amount of work would be on us to decide to upgrade the standard, and make a new standards leap (upgrade to the new tool). This is unnecessary friction, not all developers voice their concerns like I do, and defaults are powerful. 
+
+I believe avoiding this type of cost is actually in some ways a Netflix principle. Read no rules rules, by Reed Hastings :wink:
+
+## Solution
+
+So I say: 
+> Bad standards are easy to add, but expensive to maintain. Good standards are hard to add, but saves money.
+
+This is part of my Engineering principle to just **keep things simple**. Synchronisation between projects is not simple.
+
+For every instance of standardisation, there should be a clear argument for (benefits vs. costs) and a discussion about it, before it gets made a standard. And along this standard document, a justification should live, where future developers can question and remove the justifications if they are no longer necessary. Make it harder for the dummy-proof process designers to create their processes, so developers can keep our autonomy and productivity.
+

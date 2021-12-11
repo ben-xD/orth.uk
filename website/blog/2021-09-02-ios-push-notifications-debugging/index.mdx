@@ -1,0 +1,56 @@
+---
+title: 'Importing Swift Files in Objective-C, including constructors'
+authors: ben
+slug: import-swift-files-in-objective-c
+description: "A lot can go wrong, this post should give you the tools to find out what is going wrong, so you can ask the right questions and fix it."
+tags:
+  - Xcode
+  - Swift
+  - symlinks
+---
+
+The iOS code written to interact with the iOS APIs/ libraries were written in Objective-C, and it was slowing me down. Objective-C is a verbose language which apparently in the United States [pays more than $10,000 more than Swift developers](https://insights.stackoverflow.com/survey/2021#section-salary-salary-and-experience-by-language), prone to bugs (citation needed 😈) but definitely disliked by developers who use it. On StackOverflow, out of 2310 developers who use it, 73% (1688 developers) said they dreaded it. Swift is also more popular, with 4204 developers submitting the love/ dread survey. We can't just rewrite Objective-C into Swift though, it "takes too much time" and stakeholders don't have a realistic measure of technical debt, either how cheap it is to fix or how quick it can be done. They also don't understand the hiring and employee turnover implication.
+
+Here are some things I learnt along the way so you can avoid the mistakes I made, and do it better than me.
+
+<!--truncate-->
+
+## Do it and show evidence of improvement (Don't seek permission, seek forgiveness)
+
+
+
+## Either use a bridging header or make the class/ symbols **public**
+
+Those are the two options. As a Flutter library developer, I prefer not to make users add an "Objective-C bridging header" to their app, so I make use of `public` generously. As long as this library isn't exposed to your users, users cannot import your public code. 
+
+TODO explain more
+
+
+## To use a Swift class constructors, you need to explicitly name them
+
+For example,
+```swift
+public class MyLovelyClass: NSObject {
+    var delegate: UNUserNotificationCenterDelegate? = nil;
+
+    @objc(initWithDelegate:) public init(_ delegate: UIApplicationDelegate) {
+      self.delegate = delegate;
+    }
+}
+```
+
+In the Swift docs:
+
+> **Note:** The argument to the objc attribute can also change the runtime name for that declaration. You use the runtime name when calling functions that interact with the Objective-C runtime, like NSClassFromString, and when specifying class names in an app’s Info.plist file. If you specify a name by passing an argument, that name is used as the name in Objective-C code and as the runtime name. If you omit the argument, the name used in Objective-C code matches the name in Swift code, and the runtime name follows the normal Swift compiler convention of name mangling.
+
+## For more information...
+
+...read the `objc` section in the [Swift Attributes documentation](https://docs.swift.org/swift-book/ReferenceManual/Attributes.html).
+
+
+## You cannot use Swift structs or Swift enums with associated values in Objective-C
+
+
+## For managers:
+
+Rewriting is not just about productivity, its developer experience and velocity. Why are you still using Objective-C when everyone has moved to Swift? If you cannot answer this with technical reasons and instead answer, give reconsider.

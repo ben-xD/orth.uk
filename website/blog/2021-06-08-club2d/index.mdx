@@ -1,0 +1,39 @@
+---
+title: 'Anonymous video calls in React, using Ably, Mediapipe, Three.js and Next.js'
+authors: ben
+slug: club2d
+description: 'Building an anonymous video calling app without a server, using machine learning (Mediapipe), realtime pub/sub (Ably), Three.js (3D rendering) and React.js (2D/ UI rendering).'
+tags:
+  - Ably
+  - NextJS
+  - ReactJS
+  - Three.js
+  - Mediapipe
+---
+
+You can try it at [Club2D.orth.uk](https://club2d.orth.uk), but for now, you'll need to use a Desktop browser running [Chrome](chrome) or [Firefox](https://www.mozilla.org/en-GB/firefox/new/). The repo is available [here](https://github.com/ben-xD/Club), which is a fork of my original repo available [here](https://github.com/ably-labs/Club).
+
+<!--truncate-->
+
+Club2D is an anonymous video calling app inspired by the Memoji feature available on FaceTime, and allows emotions and face gestures to be shared with others without revealing someone's identity, background, disability or ethnicity. You should try building random projects which interest you because it will help you learn a lot faster than reading books or watching tutorials. Before this project, I did not know how to do 3D rendering (three.js), machine learning in the browser (MediaPipe/ TensorFlowJS), static site generation (NextJS), realtime/ event driven behaviour (Ably), nice CSS styling (TailwindCSS), and only knew a bit of ReactJS, CSS, Cloudflare and Firebase. I'm quite proud of what I made, and was delighted to see many my colleagues impressed by it as well. In doing this, I managed to ask and answer questions on StackOverflow, and am also proud to see my reputation reach 6.1k.
+
+## A short demo
+
+
+<div style={{ textAlign: 'center' }}>
+  <iframe width="900" height="506" src="https://www.youtube.com/embed/QUqt0xbigOc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+## Benefits over conventional video calling
+
+- Protect identity: By using a virtual face instead of your real face, you can be anonymous in video calls
+- Avoid bias: Your disability, ethnicity . Many conferencing apps have added background-blur.
+- Comfort: not everyone is comfortable being in front of a camera. When in a video call, we don't know if someone has us zoomed in or is recording. It might prevent distracting other colleagues.
+
+## Technologies used
+
+- Ably Javascript/ Typescript SDK: Sending 3D faces between users https://ably.com/
+- MediaPipe: Getting 3D face mesh coordinates https://www.mediapipe.dev/
+- Three.js: Rendering the 3D faces and text https://threejs.org/
+- NextJS: Building a fast react app efficiently http://nextjs.org/
+- React: UI Rendering and state management https://reactjs.org/
