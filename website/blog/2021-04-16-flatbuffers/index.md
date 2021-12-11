@@ -9,7 +9,7 @@ tags:
   - macOS
 ---
 
-TensorFlow models are saved in the [protocol buffer](https://developers.google.com/protocol-buffers/) format, which is an efficient way of storing and transporting data. I first heard and used it when I worked at [Popsa](popsa.com) where we used them to speed network requests between mobile apps and the backend. I then realised TensorFlow also uses this format to store models, including the weights and metadata. Popsa had a github repo specifically used to design and agree upon the interface between the backend and the mobile applications. gRPC also uses protocol buffers as the format. [gRPC](https://grpc.io/) also uses protocol buffers as its format, by default. You can generate the classes to create, serialize and deserialize these objects in your preferred language with the protobuf compiler, `protoc`.
+TensorFlow models are saved in the [protocol buffer](https://developers.google.com/protocol-buffers/) format, which is an efficient way of storing and transporting data. I first heard and used it when I worked at [Popsa](https://popsa.com) where we used them to speed network requests between mobile apps and the backend. I then realised TensorFlow also uses this format to store models, including the weights and metadata. Popsa had a github repo specifically used to design and agree upon the interface between the backend and the mobile applications. gRPC also uses protocol buffers as the format. [gRPC](https://grpc.io/) also uses protocol buffers as its format, by default. You can generate the classes to create, serialize and deserialize these objects in your preferred language with the protobuf compiler, `protoc`.
 
 <!--truncate-->
 
