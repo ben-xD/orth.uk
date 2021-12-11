@@ -14,7 +14,7 @@ const config = {
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'Ben-xD', // Usually your GitHub org/user name.
-  projectName: 'blog-v2', // Usually your repo name.
+  projectName: 'orth.uk', // Usually your repo name.
 
   presets: [
     [
@@ -24,7 +24,7 @@ const config = {
         docs: false,
         // docs: {
         //   sidebarPath: require.resolve('./sidebars.js'),
-        //   editUrl: 'https://github.com/ben-xD/blog-v2',
+        //   editUrl: 'https://github.com/ben-xD/orth.uk',
         // },
         blog: {
           path: './blog',
@@ -34,7 +34,7 @@ const config = {
           showReadingTime: true,
           // Please change this to your repo.
           editUrl:
-            'https://github.com/ben-xD/blog-v2/website/blog',
+            'https://github.com/ben-xD/orth.uk/website/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
