@@ -66,8 +66,13 @@ const config = {
           {to: '/about', label: 'About', position: 'left'},
           {to: '/projects', label: 'Projects', position: 'left'},
           {
-            label: 'Twitter',
-            href: 'https://twitter.com/orth_uk',
+            label: 'Stack Overflow',
+            href: 'https://stackoverflow.com/users/7365866/ben-butterworth',
+            position: 'right',
+          },
+          {
+            href: 'https://github.com/ben-xD',
+            label: 'GitHub',
             position: 'right',
           },
           {
@@ -76,13 +81,8 @@ const config = {
             position: 'right',
           },
           {
-            label: 'Stack Overflow',
-            href: 'https://stackoverflow.com/users/7365866/ben-butterworth',
-            position: 'right',
-          },
-          {
-            href: 'https://github.com/ben-xD',
-            label: 'GitHub',
+            label: 'Twitter',
+            href: 'https://twitter.com/orth_uk',
             position: 'right',
           },
         ],
