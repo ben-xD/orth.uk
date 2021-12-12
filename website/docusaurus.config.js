@@ -94,12 +94,8 @@ const config = {
             title: 'Navigation',
             items: [
               {
-                label: 'Blog',
+                label: 'Home',
                 to: '/',
-              },
-              {
-                label: 'Blog Archive',
-                to: '/archive',
               },
               {
                 label: 'About',
@@ -108,6 +104,14 @@ const config = {
               {
                 label: 'Projects',
                 to: '/projects',
+              },
+              {
+                label: 'All Blog Posts',
+                to: '/archive',
+              },
+              {
+                label: 'Video Room',
+                to: 'https://orth.uk/video',
               },
             ],
           },
