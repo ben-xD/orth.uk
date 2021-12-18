@@ -1,5 +1,5 @@
 ---
-title: 'Relaying android device audio on macOS'
+title: 'Playing Android device audio on macOS'
 description: "Instructions on relaying music and sound from Android to your macOS"
 slug: android-macOS-sound-relay
 authors: ben
@@ -11,14 +11,17 @@ tags:
 
 ## Why?
 
-You might want to play music or sounds running on Android phone on your macOS instead because your ears deserve better. In my case, I want to listen to the instructor playing on an Android app ([Fiit](https://fiit.tv/)) on my speakers. Romain Vimont, an inventor of popular and useful software is a hero once again, by making [`sndcpy`](https://github.com/rom1v/sndcpy).
+I want to listen to the instructor playing on an Android app ([Fiit](https://fiit.tv/)) on my speakers which are connected to my MacBook. I am already sharing the screen of my Android on my MacBook by using [`scrcpy`](https://github.com/Genymobile/scrcpy), a tool by Romain Vimont. [`sndcpy`](https://github.com/rom1v/sndcpy) lets us to do this, also a tool made by Romain Vimont. The naming of these tools were inspired by C library function, [`strcpy`](https://www.cplusplus.com/reference/cstring/strcpy/), which copies strings between memory locations.
 
-- Your Android device doesn't have an Audio jack...
-- Your speakers aren't bluetooth...
-- You don't want to use your headphones. 
+You want to play music or app sounds on your Android device on your macOS, and
+
+- You are displaying your Android screen on the mac already, but you want sound too
+- Your Android device doesn't have an audio jack
+- Your speakers aren't bluetooth
+- You don't want to use your headphones
   - I do not want to sweat onto my headphones, or
-  - I want to share my music with others.
-- Your macOS is connected via AUX cable (or USB-C/HDMI) to speakers, so **let's use them**.
+  - I want to share my music with others
+- Your macOS is connected via AUX cable (or USB-C/HDMI) to speakers, so **let's use them instead**
 
 <!--truncate-->
 
