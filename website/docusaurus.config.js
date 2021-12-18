@@ -38,6 +38,7 @@ const config = {
           // Please change this to your repo.
           editUrl:
             'https://github.com/ben-xD/orth.uk/blob/main/website',
+          blogPostComponent: path.resolve(__dirname, 'src/components/BlogPostPage.tsx')
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
