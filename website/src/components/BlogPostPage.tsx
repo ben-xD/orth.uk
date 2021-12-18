@@ -87,37 +87,15 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
          isBlogPostPage>
          <BlogPostContents />
        </BlogPostItem>
-
-       {/* <script src="https://utteranc.es/client.js"
-        repo="ben-xd/orth.uk"
-        issue-term="pathname"
+      <InnerHTML html={`
+        <script src="https://utteranc.es/client.js"
+        repo="ben-xD/orth.uk-comments"
+        issue-term="Comment thread [orth.uk]: ${frontMatter.slug}"
         label="Comments"
         theme="github-light"
         crossorigin="anonymous"
-        async>
-</script> */}
-<InnerHTML html={`
-<script src="https://utteranc.es/client.js"
-repo="ben-xD/orth.uk"
-issue-term="pathname"
-theme="github-light"
-crossorigin="anonymous"
-async>
-`} />
-       {/* <div id="remark42"></div>
-        <InnerHTML html={`<script>
-            var remark_config = {
-              host: "${siteConfig.customFields.REMARK_URL}",
-              site_id: "${siteConfig.customFields.REMARK_SITE_ID}",
-              components: ['embed', 'last-comments', 'counter'],
-              max_shown_comments: 10,
-              theme: 'light',
-              show_email_subscription: false, 
-            };
-            </script>
-            `}/>
-       <InnerHTML html={`<script>!function(e,n){for(var o=0;o<e.length;o++){var r=n.createElement("script"),c=".js",d=n.head||n.body;"noModule"in r?(r.type="module",c=".mjs"):r.async=!0,r.defer=!0,r.src=remark_config.host+"/web/"+e[o]+c,d.appendChild(r)}}(remark_config.components||["embed"],document);</script>`}/> */}
- 
+        async></script>
+      `} />
        {(nextItem || prevItem) && (
          <BlogPostPaginator nextItem={nextItem} prevItem={prevItem} />
        )}
