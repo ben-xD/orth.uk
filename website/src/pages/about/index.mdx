@@ -6,12 +6,20 @@ authors: ben
 
 ### Professional
 
-I'm constantly learning. I invest in myself, developer tooling and the products that I work on. Simplicity / encapsulating complexity, developer experience and user experience are important.
+I feel most rewarded 
+1. when I'm **learning and investing** in myself, and 
+2. when solving problems for the user by **simplifying and encapsulating complexity**.
+
+### Feedback
+
+Do you have something important I need to hear, but you're hesitating? Please give me feedback, you can submit them anonymously on my [feedback page](/feedback).
+
+### Links
 
 <!-- - **<a target="_blank" href={require('./cv.pdf').default}>CV</a>** -->
 - [**CV**](https://orth.uk/cv.pdf)
 - [**LinkedIn**](https://www.linkedin.com/in/bbutterworth/)
-- [**Stack Overflow**](https://stackoverflow.com/users/7365866/ben-butterworth?tab=profile):
+- [**Stack Overflow:**](https://stackoverflow.com/users/7365866/ben-butterworth?tab=profile)
 
 <a href='https://stackoverflow.com/users/7365866/ben-butterworth'>
   <img
@@ -23,9 +31,37 @@ I'm constantly learning. I invest in myself, developer tooling and the products 
   />
 </a>
 
+- [**GitHub:**](https://github.com/ben-xD)
+
+[![Ben's github stats](https://github-readme-stats.vercel.app/api?username=ben-xD&theme=tokyonight&show_icons=true&count_private=true)](https://github.com/Ben-xD)
+[![Ben's languages](https://github-readme-stats.vercel.app/api/top-langs/?username=ben-xd&layout=compact&langs_count=10&theme=tokyonight)](https://github.com/Ben-xD)
+
+### Personal
+
+I am vegan 🥕, love animals and this planet (nature, outdoors). Contact me if you have similar interests or are solving solve interesting and important problems, I'd love to help.
+
+### Contact
+
+`final bensEmailAddress = "ben" + "@orth.uk";`
+
+```dart
+if (visitor.isInterestedInBuildingCoolThings || visitor.isInterestedInSolvingImportantIssues) {
+  final transport = new SmtpTransport(options);
+  final envelope = Envelope()
+    ..from = 'you@domain.com'
+    ..from = 'Orth.uk Visitor'
+    ..recipients = [bensEmailAddress]
+    ..subject = 'Hey 👋'
+    ..text = "How's it going? 😃";
+  
+  await transport.send(envelope)
+  print("Email sent to $bensEmailAddress")
+}
+```
+
 ### Technologies I have used (recent first):
 
-I actually started off as a designer, not an engineer or programmer. Some of my ideas/contributions can be found in luxury hotel rooms around the world (but also not so luxurious hotels), and in the back of camping vehicles in Australia 😅.
+I actually started off as an (unpaid) product designer, not an engineer or programmer. Some of my contributions can be found in hotel rooms around the world, and in the back of camping vehicles in Australia 😅. However, in 2017 I learnt the impact possible from ones bedroom is amplified through programming. I haven't stopped programming since.
 
 - **[Flutter](https://flutter.dev/)**, [**iOS**](https://developer.apple.com/) and [**Android**](https://developer.android.com/): Though I've used Flutter on-and-off since 2020, I've been building a Flutter package plugin, [ably_flutter](https://github.com/ably/ably-flutter) containing a lot of Android and iOS code. It was nice to learn some Objective-C, but I've already begun the migration to Swift 😂. Recently, I've added push notification support, allowing users to register the device for push notifications, and handle everything on the Dart side without writing native code: handling foreground messages, background messages and notification taps / app launches. This was more complicated than expected, since I had to launch a Flutter Engine when the message arrives on Android. 
 - **[Three.js](https://threejs.org/), [NextJS](https://nextjs.org/)/[React](https://reactjs.org/), WebSockets/[Ably](https://ably.com/), [MediaPipe](https://www.mediapipe.dev/), [TailwindCSS](https://tailwindcss.com/):** I learnt these while making [Club2d](/club2d), an anonymous video calling app.
@@ -56,26 +92,3 @@ I actually started off as a designer, not an engineer or programmer. Some of my 
 - Cloudflare DNS - They update their DNS records almost immediately when you make a change. So TTL does not matter, mostly 😇.
 - AWS EC2, Lambdas - I used to use Lambdas for email forwarding. I also used EC2 it to some extent when working at Ocado. I've also explored Openfaas and Knative, but I don't want to pay for Kubernetes cluster.
 - Heroku - The tool that shows up a lot in front of beginners. ~~I soon outgrew this.~~ I just realised there are some really good websites hosted on heroku.
-
-### Personal
-
-I am vegan 🥕, love animals, nature and the outdoors. Contact me if you have similar interests or are solving solve interesting and impactful problems, I'd love to help.
-
-### Contact
-
-`final bensEmailAddress = "ben" + "@orth.uk";`
-
-```dart
-if (isInterestedInBuildingCoolThings || isInterestedInSolvingImportantIssues) {
-  final transport = new SmtpTransport(options);
-  final envelope = Envelope()
-    ..from = 'you@domain.com'
-    ..from = 'Orth.uk Visitor'
-    ..recipients = [bensEmailAddress]
-    ..subject = 'Hey 👋'
-    ..text = "How's it going? 😃";
-  
-  await transport.send(envelope)
-  print("Email sent to $bensEmailAddress")
-}
-```
