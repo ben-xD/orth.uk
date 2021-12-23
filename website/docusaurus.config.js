@@ -66,6 +66,7 @@ const config = {
           // },
           {to: '/about', label: 'About', position: 'left'},
           {to: '/projects', label: 'Projects', position: 'left'},
+          {to: '/feedback', label: 'Feedback', position: 'left'},
           {
             label: 'Stack Overflow',
             href: 'https://stackoverflow.com/users/7365866/ben-butterworth',
@@ -113,6 +114,10 @@ const config = {
               {
                 label: 'Video Room',
                 to: 'https://orth.uk/video',
+              },
+              {
+                label: 'Feedback',
+                to: '/feedback',
               },
             ],
           },
