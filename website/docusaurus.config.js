@@ -67,26 +67,6 @@ const config = {
           {to: '/about', label: 'About', position: 'left'},
           {to: '/projects', label: 'Projects', position: 'left'},
           {to: '/feedback', label: 'Feedback', position: 'left'},
-          {
-            label: 'Stack Overflow',
-            href: 'https://stackoverflow.com/users/7365866/ben-butterworth',
-            position: 'right',
-          },
-          {
-            href: 'https://github.com/ben-xD',
-            label: 'GitHub',
-            position: 'right',
-          },
-          {
-            label: 'LinkedIn',
-            href: 'https://www.linkedin.com/in/bbutterworth/',
-            position: 'right',
-          },
-          {
-            label: 'Twitter',
-            href: 'https://twitter.com/orth_uk',
-            position: 'right',
-          },
         ],
       },
       footer: {
