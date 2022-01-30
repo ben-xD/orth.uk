@@ -1,6 +1,6 @@
 # [Orth.uk](https://orth.uk)
 
-Contains projects hosted on [Orth.uk](https://orth.uk)
+Contains any projects hosted on [Orth.uk](https://orth.uk) which were created in 2022 or later.
 
 ## Projects
 
