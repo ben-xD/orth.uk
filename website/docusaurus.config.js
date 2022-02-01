@@ -17,7 +17,8 @@ const config = {
   organizationName: 'Ben-xD', // Usually your GitHub org/user name.
   projectName: 'orth.uk', // Usually your repo name.
   plugins: [
-    path.resolve(__dirname, 'plugins/service-worker-remover-plugin')
+    path.resolve(__dirname, 'plugins/service-worker-remover-plugin'),
+    path.resolve(__dirname, 'plugins/hot-jar-plugin')
   ],
   presets: [
     [
