@@ -6,6 +6,6 @@ Comments are stored in GitHub issues using [utterances](https://utteranc.es) in 
 
 # Tools used
 
-- Built using [Docusaurus](https://docusaurus.io/)
-- Deployed with [Cloudflare Pages](https://pages.cloudflare.com/)
-- Commenting system is [utterances](https://utteranc.es/)
+- Built using [Docusaurus](https://docusaurus.io/), which uses React.
+- Deployed with [Cloudflare Pages](https://pages.cloudflare.com/), on the free tier.
+- Commenting system is [giscus](https://giscus.app/), which uses GitHub discussions to store comments.
