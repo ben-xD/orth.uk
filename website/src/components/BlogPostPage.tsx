@@ -88,13 +88,20 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
          <BlogPostContents />
        </BlogPostItem>
       <InnerHTML html={`
-        <script src="https://utteranc.es/client.js"
-        repo="ben-xD/orth.uk-comments"
-        issue-term="Comment thread [orth.uk]: ${frontMatter.slug}"
-        label="Comments"
-        theme="github-light"
+      <script src="https://giscus.app/client.js"
+        data-repo="ben-xD/orth.uk-comments"
+        data-repo-id="R_kgDOGjNfow"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOGjNfo84CBEP2"
+        data-mapping="pathname"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="light"
+        data-lang="en"
         crossorigin="anonymous"
-        async></script>
+        async>
+      </script>
       `} />
        {(nextItem || prevItem) && (
          <BlogPostPaginator nextItem={nextItem} prevItem={prevItem} />
