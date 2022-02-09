@@ -30,6 +30,9 @@ const config = {
         //   sidebarPath: require.resolve('./sidebars.js'),
         //   editUrl: 'https://github.com/ben-xD/orth.uk',
         // },
+        pages: {
+          mdxPageComponent: path.resolve(__dirname, 'src/components/mdxPageComponent.tsx')
+        },
         blog: {
           path: './blog',
           routeBasePath: '/',
