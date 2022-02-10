@@ -1,0 +1,83 @@
+---
+title: 'SSH into your private machines from anywhere, for free, using Cloudflare Tunnel'
+authors: ben
+slug: 'ssh-over-cloudflare'
+description: 'SSH to machines in private networks using an SSH key, from anywhere in the world, using Cloudflare Tunnel.'
+tags:
+  - ssh
+  - cloudflare
+---
+
+# SSH into your private machines from anywhere, for free, using Cloudflare Tunnel
+## Outcome
+By the end of this post, you'll be able to run: `ssh $machine_name` from anywhere in the internet-connected planet, using SSH keys. It is free and requires no future maintainance. This guide uses [Cloudflare Tunnel](https://www.cloudflare.com/en-gb/products/tunnel/), a service by Cloudflare with a free-tier. It will filter traffic to your machines through Cloudflare's network, including authenticating you. Because of this, your machines won't directly be exposed to threat actors and "1337 haxors".
+## Motivation
+You might have a machine running in your local network and want to access from anywhere in the world. **Alternative** solutions include: 
+- configuring your router to **port forward** to your specific machine or setting your machine as a demilitarized zone (DMZ). **Disadvantages:** your home router's IP address might change, so you'll need to use the new IP address. Each port is also limited to a single machine, so you'd have to choose a different port for a different machine.
+- Many alternatives are listed in [anderspitman/awesome-tunnelling](https://github.com/anderspitman/awesome-tunneling), including [Cloudflare Tunnel](https://www.cloudflare.com/en-gb/products/tunnel/). Many of these require configuration, and the last time I tried ngrok, I couldn't choose the domain name on the free tier.
+
+I already use Cloudflare for this website (Cloudflare Pages), web analytics, configuring DNS records, and registering my domains (with no additional fee on top of the Administrator fee, e.g. Verisign for `.com` and Nominet for `.uk`). Hey UK domain owners, Cloudflare Registrar supports `uk` and `co.uk` TLDs now 😉.
+
+So I used `cloudflared` to do this, but realised there was no guide written that takes me step by step, to success. There was a [Cloudflare official guide](https://developers.cloudflare.com/cloudflare-one/tutorials/ssh), but some of the steps are not necessary, confusing (e.g. limiting the "application" to 1 month) and missing the `config.yml` schema.
+
+## Pre-requisites 🦑
+- A free Cloudflare account
+- Understand Cloudflare Tunnel, by following [Set up your first tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide). You'll end up with a website added to Cloudflare, `cloudflared` [installed](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/installation)and logged in on your machine, and a high level understanding of Cloudflare Tunnel. **You don't have to do step 4 (create configuration file) or later.**
+## Setup SSH server on your target machine 🎯
+- Skip if you've done this already, for example, you can already SSH into your machine.
+- For Ubuntu/Debian, 
+    - **Install service**: run `sudo apt install openssh-server`
+    - **Start service**: run `sudo systemctl start ssh`
+    - **Schedule service** (to start on machine start-up): `sudo systemctl enable ssh`
+- For other operating systems, try using search engines.
+## Quick check: setup a tunnel and SSH 🧪
+- This step is just a quick check that you can SSH into the machine, before you waste time configuring stuff.
+- Start a cloudflare tunnel: run `cloudflared tunnel --hostname machine.example.com --url ssh://localhost:22`
+    - Reminder: edit `example.com` to one you have added on Cloudflare, and update `machine` to whatever you prefer. `cloudflared` will create a CNAME record called `machine.example.com`.
+- SSH into your machine using password based authentication: run `ssh username@machine.example.com`
+    - Reminder: Update username and host.
+## Configure the `cloudflared` service 🧑‍💻
+- We want this service to be running all the time (*daemon*), not just when I run the command. Also, some of the steps in [Cloudflare: Run as a service](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/run-tunnel/run-as-service) are broken.
+- Create a tunnel: `cloudflared tunnel create $tunnel_name`, where `$tunnel_name` is a name you can use to reference it.
+- Update a DNS record: `cloudflared tunnel route dns $tunnel_id phanteks.orth.uk`
+- Create a config file: `~/.cloudflare/config.yml`, containing:
+```
+tunnel: $tunnel_id
+credentials-file: /home/$user/.cloudflared/$tunnel_id.json
+url: ssh://localhost:22
+```
+- Run the tunnel: `cloudflared tunnel run --url=ssh://localhost:22$  $tunnel_name
+- Install service: `sudo cloudflared --config /home/ben/.cloudflared/config.yml service install`
+- Start service: run `sudo systemctl start cloudflared`
+- Schedule service (to start on machine start-up): `sudo systemctl enable cloudflared`
+## Configure SSH client 💻
+- Create a keypair. The private key is for your client and the public key should be given to anyone who wants to authenticate you (the machine you want to SSH to, *Phanteks*). My keypair is called `phanteks`(private key) and `phanteks.pub` (public key): 
+    - Run `ssh-keygen`. Before that, preferably `cd ~/.ssh`, so that your generated keys are stored there.
+- Copy over the **public** SSH key (`$KEYNAME.pub`): Run `ssh-copy-id -i ~/.ssh/KEYNAME.pub $machine_domain`
+- Add the following to `~/.ssh/config`. Create the file if it doesn't exist.
+```bash
+# This only works when you are on the same local network
+Host phanteksLocal
+        HostName Phanteks.local
+        IdentityFile ~/.ssh/phanteks
+        User ben
+        Port 22
+
+# Cloudflare Tunnel
+Host phanteks
+        HostName phanteks.orth.uk
+        IdentityFile ~/.ssh/phanteks
+        ProxyCommand cloudflared access ssh --hostname %h
+        User ben
+```
+## Secure SSH server 🚔
+- Optional: Change the port used by SSH, since the default port is well known (22). You'll also have to update `~/.ssh/config` and `~/.cloudflared/config.yml` with this new port
+- Optional: Disable password authentication
+    - This is usually done to improve security: mitigate random password attacks, but this is already mitigated with Cloudflare Tunnels.
+    - But in the spirit of "defense in depth", we should still disable it. We should assume attackers might still come from within your local network, including successfully authenticating with Cloudflare Tunnel
+- Restart the service: run `sudo systemctl restart ssh`
+## Usage: connect to machine 🤞
+- `ssh phanteks`
+## Conclusion 💌
+- Maybe there is a way to automate this so all machines I use in the future will be set up automatically. Thankfully, I am not building a server farm in home, so this is a very low priority.
+- **Question:** do you use a different tool which require no maintenance or cost to run?
