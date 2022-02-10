@@ -81,7 +81,7 @@ Host phanteks
 - Optional: Disable password authentication
     - This is usually done to improve security: mitigate random password attacks, but this is already mitigated with Cloudflare Tunnels.
     - But in the spirit of "defense in depth", we should still disable it. We should assume attackers might still come from within your local network, including successfully authenticating with Cloudflare Tunnel
-- Restart the service: run `sudo systemctl restart ssh`
+- Restart the services: run `sudo systemctl restart ssh cloudflared`
 ## Usage: connect to machine 🤞
 - Run `ssh phanteks`
 ## Conclusion 💌
