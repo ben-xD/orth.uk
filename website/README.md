@@ -8,4 +8,4 @@ Comments are stored in GitHub issues using [utterances](https://utteranc.es) in 
 
 - Built using [Docusaurus](https://docusaurus.io/), which uses React.
 - Deployed with [Cloudflare Pages](https://pages.cloudflare.com/), on the free tier.
-- Commenting system is [giscus](https://giscus.app/), which uses GitHub discussions to store comments.
+- Commenting system is [giscus](https://giscus.app/), which uses GitHub discussions to store comments. If I want to enable comments on any page, just add `isCommentsEnabled: true` to the YAML frontmatter.
