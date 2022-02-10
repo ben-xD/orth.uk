@@ -25,7 +25,7 @@ So I used `cloudflared` to do this, but realised there was no guide written that
 
 ## Pre-requisites 🦑
 - A free Cloudflare account
-- Understand Cloudflare Tunnel, by following [Set up your first tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide). You'll end up with a website added to Cloudflare, `cloudflared` [installed](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/installation)and logged in on your machine, and a high level understanding of Cloudflare Tunnel. **You don't have to do step 4 (create configuration file) or later.**
+- Understand Cloudflare Tunnel, by following [Set up your first tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide). You'll end up with a website added to Cloudflare, `cloudflared` [installed](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/installation) and logged in on your machine, and a high level understanding of Cloudflare Tunnel. **You don't have to do step 4 (create configuration file) or later.**
 ## Setup SSH server on your target machine 🎯
 - Skip if you've done this already, for example, you can already SSH into your machine.
 - For Ubuntu/Debian, 
@@ -80,7 +80,7 @@ Host phanteks
     - But in the spirit of "defense in depth", we should still disable it. We should assume attackers might still come from within your local network, including successfully authenticating with Cloudflare Tunnel
 - Restart the service: run `sudo systemctl restart ssh`
 ## Usage: connect to machine 🤞
-- `ssh phanteks`
+- Run `ssh phanteks`
 ## Conclusion 💌
-- Maybe there is a way to automate this so all machines I use in the future will be set up automatically. Thankfully, I am not building a server farm in home, so this is a very low priority. I was just taking a quick look at Ansible yesterday.
+- Maybe there is a way to automate this so all machines I use in the future will be set up automatically. Thankfully, I am not building a server farm in home or moving homes very often, so this is a very low priority. I was just taking a quick look at Ansible yesterday.
 - **Question:** do you use a different tool which require no maintenance or cost to run?
