@@ -11,6 +11,9 @@ tags:
 # SSH into your private machines from anywhere, for free, using Cloudflare Tunnel
 ## Outcome
 By the end of this post, you'll be able to run: `ssh $machine_name` from anywhere in the internet-connected planet, using SSH keys. It is free and requires no future maintainance. This guide uses [Cloudflare Tunnel](https://www.cloudflare.com/en-gb/products/tunnel/), a service by Cloudflare with a free-tier. It will filter traffic to your machines through Cloudflare's network, including authenticating you. Because of this, your machines won't directly be exposed to threat actors and "1337 haxors".
+
+<!--truncate-->
+
 ## Motivation
 You might have a machine running in your local network and want to access from anywhere in the world. **Alternative** solutions include: 
 - configuring your router to **port forward** to your specific machine or setting your machine as a demilitarized zone (DMZ). **Disadvantages:** your home router's IP address might change, so you'll need to use the new IP address. Each port is also limited to a single machine, so you'd have to choose a different port for a different machine.
