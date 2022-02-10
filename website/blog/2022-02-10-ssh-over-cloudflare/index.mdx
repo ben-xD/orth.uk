@@ -16,7 +16,7 @@ By the end of this post, you'll be able to run: `ssh $machine_name` from anywher
 
 ## Motivation
 You might have a machine running in your local network and want to access from anywhere in the world. **Alternative** solutions include: 
-- configuring your router to **port forward** to your specific machine or setting your machine as a demilitarized zone (DMZ). **Disadvantages:** your home router's IP address might change, so you'll need to use the new IP address. Each port is also limited to a single machine, so you'd have to choose a different port for a different machine.
+- configuring your router to **port forward** to your specific machine or setting your machine as a demilitarized zone (DMZ). **Disadvantages:** your home router's IP address might change, so you'll need to use the new IP address. Each port is also limited to a single machine, so you'd have to choose a different port for a different machine. Your DNS record also publishes the IP address of your router, which can be used to locate you - *somewhat unreliably, depending on who you are*.
 - Many alternatives are listed in [anderspitman/awesome-tunnelling](https://github.com/anderspitman/awesome-tunneling), including [Cloudflare Tunnel](https://www.cloudflare.com/en-gb/products/tunnel/). Many of these require configuration, and the last time I tried ngrok, I couldn't choose the domain name on the free tier.
 
 I already use Cloudflare for this website (Cloudflare Pages), web analytics, configuring DNS records, and registering my domains (with no additional fee on top of the Administrator fee, e.g. Verisign for `.com` and Nominet for `.uk`). Hey UK domain owners, Cloudflare Registrar supports `uk` and `co.uk` TLDs now 😉.
@@ -74,7 +74,10 @@ Host phanteks
         User ben
 ```
 ## Secure SSH server 🚔
-- Optional: Change the port used by SSH, since the default port is well known (22). You'll also have to update `~/.ssh/config` and `~/.cloudflared/config.yml` with this new port
+- Optional: Change the port used by SSH, since the default port is well known (22). You'll also have to update `~/.ssh/config` and `~/.cloudflared/config.yml` with this new port. 
+  - Warning ‼️: `cloudflared` actually duplicates this file into `/etc/cloudflared/config.yml` first when you install the service. If you change `~/.cloudflared/config.yml`, be sure to:
+    - manually update the file, or 
+    - delete the file (run `sudo rm /etc/cloudflared/config.yml`) and reinstall the service (run `sudo cloudflared --config /home/$USER/.cloudflared/config.yml service install`).
 - Optional: Disable password authentication
     - This is usually done to improve security: mitigate random password attacks, but this is already mitigated with Cloudflare Tunnels.
     - But in the spirit of "defense in depth", we should still disable it. We should assume attackers might still come from within your local network, including successfully authenticating with Cloudflare Tunnel
