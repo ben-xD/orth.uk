@@ -8,7 +8,7 @@
 - Take a [keyboard shortcut](https://developer.android.com/studio/intro/keyboard-shortcuts) printout
 - Install [Flutter](https://docs.flutter.dev/get-started/install) & [Android Studio](https://developer.android.com/studio/)
 - **Optional (& macOS only):** Install [Xcode](https://developer.apple.com/xcode/)
-- Confirm things are set up correctly: in terminal, run `flutter doctor`
+- Run `flutter doctor` and fix any issues
 --h
 <!-- .slide: data-background="#ded9fc" -->
 ## link.orth.uk/festival
@@ -60,10 +60,35 @@ Users can:
 --v
 User can't (not today): 
 - authentication (user accounts/login)
+- edit their own questions
+- upvote/downvote other questions
 - rate limiting
 
 --h
+## Domain
+What "concepts" do we need?
+- Session  <!-- .element: class="fragment" data-fragment-index="1" -->
+- Question  <!-- .element: class="fragment" data-fragment-index="2" -->
+- Answers  <!-- .element: class="fragment" data-fragment-index="3" -->
+--v
 ## Architecture 🏗
+- Flutter mobile app
+- Some realtime communication protocol (later)
+- Backend to sync data between mobile apps
+  - Serverless functions <!-- .element: class="fragment" data-fragment-index="1" -->
+    - Cloudflare Workers <!-- .element: class="fragment" data-fragment-index="2" -->
+--v
+## Backend
+Let's think about what type of actions we might do:
+- create session <!-- .element: class="fragment" data-fragment-index="1" -->
+- get session state: all questions and answers in a session. <!-- .element: class="fragment" data-fragment-index="2" -->
+- create question <!-- .element: class="fragment" data-fragment-index="3" -->
+- answer question <!-- .element: class="fragment" data-fragment-index="3" -->
+- websocket endpoint to get sync events from session: get new questions <!-- .element: class="fragment" data-fragment-index="4" -->
+--v
+## Testing backend
+- manual validation using tools like Postman, Insomnia and Flutter apps
+- unit testing? **Not today 😬💀** <!-- .element: class="fragment" data-fragment-index="1" -->
 
 --h
 ## Picking technology 🤯
@@ -135,6 +160,8 @@ Some users, applications or network conditions might overload your system. You m
 We need users consent, a privacy policy and probably some more things.
 --v
 ## We didn't cover: offline usage 😩
+
+Maybe we did?
 
 --h
 ## Final Q&A 🙋🏽‍🙋🙋🏽‍♀️
