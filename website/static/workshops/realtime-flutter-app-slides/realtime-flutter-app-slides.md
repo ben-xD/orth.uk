@@ -10,7 +10,8 @@
 - **Optional (& macOS only):** Install [Xcode](https://developer.apple.com/xcode/)
 - Confirm things are set up correctly: in terminal, run `flutter doctor`
 --h
-## Slides: [link.orth.uk/festival](https://link.orth.uk/festival)
+<!-- .slide: data-background="#ded9fc" -->
+## link.orth.uk/festival
 <a href="https://link.orth.uk/festival"><img class="r-stretch" src="./qr-code.png"></a>
 
 --h
@@ -22,28 +23,24 @@
     - Flutter Developer job
     - small contributions to Flutter Engine and other Flutter packages
 - **Job:** Software Engineer at [**Helsing**](https://helsing.ai/)
-    - **Helsing:** AI to protect democracies
+    - **Helsing:** AI to protect democracies - helsing.ai
     - we are hiring: [jobs.lever.co/helsing](https://jobs.lever.co/Helsing)
     - Opinions are my own
 
 --h
-<!-- .slide: data-background="#0057B7" -->
-# 🇺🇦
-
---h
-<!-- .slide: data-background="#0057B7" -->
+<!-- .slide: data-background="#504685" -->
 **Question:** Who has done mobile development before?
 --v
-<!-- .slide: data-background="#FFDD00" -->
+<!-- .slide: data-background="#ded9fc" -->
 **Question:** Who has installed Flutter before?
 --v
-<!-- .slide: data-background="#0057B7" -->
+<!-- .slide: data-background="#504685" -->
 **Question:** Who has an up-to-date installation of Flutter
 --v
-<!-- .slide: data-background="#FFDD00" -->
+<!-- .slide: data-background="#ded9fc" -->
 **Question:** What are some nice mobile apps you have used?
 --v
-<!-- .slide: data-background="#0057B7" -->
+<!-- .slide: data-background="#504685" -->
 **Question:** What properties do good apps have?
 
 --h
@@ -99,6 +96,7 @@ User can't (not today):
   - Architecture: Backend Service
   - UI: Create question
   - UI: Create question
+  - Practice some keyboard shortcuts ✌️
 
 --h
 ## Sprint 2 🏃🏿‍♀️🏃‍♀️🏃🏃🏼‍♂️🏃🏼‍♂️🏃‍♀️🏃🏃🏼‍♂️
@@ -110,7 +108,7 @@ User can't (not today):
 - **Reliable vs unrealiable:** WebSockets, RTP, WebRTC, WebTransport
 - **App state:** app is open vs closed
 --v
-## Tasks ✅opn
+## Tasks ✅
 - Subscribe for updates to questions
 
 --h
