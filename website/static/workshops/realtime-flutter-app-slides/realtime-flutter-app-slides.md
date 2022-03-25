@@ -66,10 +66,10 @@ User can't (not today):
 
 --h
 ## Domain
-What "concepts" do we need?
-- Session  <!-- .element: class="fragment" data-fragment-index="1" -->
+What entities ("domain objects") do we need?
+- Answer  <!-- .element: class="fragment" data-fragment-index="1" -->
 - Question  <!-- .element: class="fragment" data-fragment-index="2" -->
-- Answers  <!-- .element: class="fragment" data-fragment-index="3" -->
+- Session (where answers and questions are packaged up)  <!-- .element: class="fragment" data-fragment-index="3" -->
 --v
 ## Architecture 🏗
 - Flutter mobile app
@@ -84,7 +84,8 @@ Let's think about what type of actions we might do:
 - get session state: all questions and answers in a session. <!-- .element: class="fragment" data-fragment-index="2" -->
 - create question <!-- .element: class="fragment" data-fragment-index="3" -->
 - answer question <!-- .element: class="fragment" data-fragment-index="3" -->
-- websocket endpoint to get sync events from session: get new questions <!-- .element: class="fragment" data-fragment-index="4" -->
+- websocket endpoint to get sync events from session: get new questions and answers <!-- .element: class="fragment" data-fragment-index="4" -->
+- Delete session (useful for debugging) <!-- .element: class="fragment" data-fragment-index="5" -->
 --v
 ## Testing backend
 - manual validation using tools like Postman, Insomnia and Flutter apps
@@ -102,7 +103,7 @@ Let's think about what type of actions we might do:
 
 - Interactive workshop
 - **15m:** Introduction
-- **1hr30m:** threee **30 minute sprints**, each with:
+- **1hr30m:** two or three **30 minute sprints**, each with:
   - 10 minute concepts and discussion
   - 10 minutes live coding
   - 10 minutes your coding & technical support
@@ -117,11 +118,13 @@ Let's think about what type of actions we might do:
 ## Concept: Separation of concerns 🥅
 --v
 ## Tasks ✅
-  - Create flutter app
-  - Architecture: Backend Service
-  - UI: Create question
-  - UI: Create question
-  - Practice some keyboard shortcuts ✌️
+- Create flutter app
+- Prepare networking code (packages: `http`, `json_serializable`, `json_annotation`)
+- Create session
+- Get session (by its code)
+- Navigate to the session page
+- Create question
+- **Extra:** Practice some keyboard shortcuts and snippets ✌️
 
 --h
 ## Sprint 2 🏃🏿‍♀️🏃‍♀️🏃🏃🏼‍♂️🏃🏼‍♂️🏃‍♀️🏃🏃🏼‍♂️
@@ -130,12 +133,14 @@ Let's think about what type of actions we might do:
 ## **Question:** What is realtime? ⏰
 --v
 ## Different types ⏰⏱⌚️
-- **Reliable vs unrealiable:** WebSockets, RTP, WebRTC, WebTransport
+- **Reliable vs unreliable:** WebSockets, RTP, WebRTC, WebTransport
 - **App state:** app is open vs closed
 --v
 ## Tasks ✅
-- Subscribe for updates to questions
-
+- Prepare networking code (`web_socket_channel` package) 
+- Subscribe for updates to questions, print something when a message is received
+  - trigger the event to sync by e.g. creating a question
+- Update UI with latest questions and answers
 --h
 ## Sprint 3 🏃🏿‍♀️🏃‍♀️🏃🏃🏼‍♂️🏃
 --v
@@ -144,7 +149,7 @@ Let's think about what type of actions we might do:
 ## Concept: Event sourcing 🎃
 --v
 ## Tasks ✅
-- Allow user to see questions whilst offline, even when app is restarted
+- Persistence: Allow user to see questions whilst offline, even when app is restarted. Save this to a database.
 - Allow users to ask question whilst offline
 
 --h
