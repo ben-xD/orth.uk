@@ -42,6 +42,9 @@
 --v
 <!-- .slide: data-background="#504685" -->
 **Question:** What properties do good apps have?
+--v
+<!-- .slide: data-background="#504685" -->
+**Question:** How many hours of Flutter have you done?
 
 --h
 # 🤓
@@ -162,7 +165,7 @@ Authentication
 Some users, applications or network conditions might overload your system. You might choose to reduce the load on your system, at the expense of their experience.
 --v
 ## We didn't cover: GDPR 👮‍♀️
-We need users consent, a privacy policy and probably some more things.
+We need users consent, a privacy policy, correct data jurisdiction and probably some more things.
 --v
 ## We didn't cover: offline usage 😩
 
@@ -171,6 +174,8 @@ Maybe we did?
 --h
 ## Final Q&A 🙋🏽‍🙋🙋🏽‍♀️
 - Fill out your feedback: [orth.uk/feedback](https://orth.uk/feedback)
+- **Optional:** Backend implementation
+- **Optional:** Behind the scenes 
 - Technical support after this 😉
 
 --h
