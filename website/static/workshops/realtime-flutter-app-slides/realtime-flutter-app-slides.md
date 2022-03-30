@@ -6,8 +6,7 @@
 ---
 ##### Step 1: Prepare dev environment
 - Take a [keyboard shortcut](https://developer.android.com/studio/intro/keyboard-shortcuts) printout
-- Install [Flutter](https://docs.flutter.dev/get-started/install) & [Android Studio](https://developer.android.com/studio/)
-- **Optional (& macOS only):** Install [Xcode](https://developer.apple.com/xcode/)
+- Install [Flutter](https://docs.flutter.dev/get-started/install), [Android Studio](https://developer.android.com/studio/) & opt. ([Xcode](https://developer.apple.com/xcode/))
 - Run `flutter doctor` and fix any issues
 --h
 <!-- .slide: data-background="#ded9fc" -->
