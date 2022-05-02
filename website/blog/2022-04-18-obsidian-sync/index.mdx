@@ -57,3 +57,9 @@ Here's a picture of a file from my Obsidian Vault I wrote on macOS, but it's vie
     - I also tried Termux and cloned my repo there. However, I stopped using it because it didn't have an easy button to press, unlike the sync button on GitJournal. You have to a run a few commands in the terminal to set up the file permissions and update the package repositories so you can install `git`, `vim` and other useful tools.
     - If you install `adb`, you can enter the command line on the Android by running `adb shell`. You can explore the Android filesystem and use `adb` to manually copy files using `scp` or `rsync` from your machine.
 - **Not for iOS:** This guide doesn't work for iOS, but there is [a way to use git to sync files on iOS](https://forum.obsidian.md/t/mobile-setting-up-ios-git-based-syncing-with-mobile-app-using-working-copy/16499), but the software is paid (Working Copy, $19.99) if you want to make changes on iOS.
+
+## Extra Hint: git conflicts
+
+If you do use git to sync files, you might find some merge conflicts between devices caused by the `.obsidian/workspace` file. 
+To fix this, in your Obsidian Vault, create a `.gitignore` file and add `.obisidian/workspace` in the file.
+If you have already previously committed the file, run `git rm --cached .obsidian/workspace` to untrack the file.
