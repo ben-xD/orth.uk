@@ -6,41 +6,64 @@
  */
 
  import React from 'react';
- import Seo from '@theme/Seo';
+ import clsx from 'clsx';
+ import {
+   PageMetadata,
+   HtmlClassNameProvider,
+   ThemeClassNames,
+ } from '@docusaurus/theme-common';
  import BlogLayout from '@theme/BlogLayout';
  import BlogPostItem from '@theme/BlogPostItem';
  import BlogPostPaginator from '@theme/BlogPostPaginator';
- import type {Props} from '@theme/BlogPostPage';
- import {ThemeClassNames} from '@docusaurus/theme-common';
  import TOC from '@theme/TOC';
-import InnerHTML from 'dangerously-set-html-content'
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+ import type {Props} from '@theme/BlogPostPage';
+ import InnerHTML from 'dangerously-set-html-content'
  
- function BlogPostPage(props: Props): JSX.Element {
+ function BlogPostPageMetadata(props: Props): JSX.Element {
+   const {content: BlogPostContents} = props;
+   const {assets, metadata} = BlogPostContents;
+   const {title, description, date, tags, authors, frontMatter} = metadata;
+   const {keywords} = frontMatter;
+   const image = assets.image ?? frontMatter.image;
+   return (
+     <PageMetadata
+       title={title}
+       description={description}
+       keywords={keywords}
+       image={image}>
+       <meta property="og:type" content="article" />
+       <meta property="article:published_time" content={date} />
+       {/* TODO double check those article meta array syntaxes, see https://ogp.me/#array */}
+       {authors.some((author) => author.url) && (
+         <meta
+           property="article:author"
+           content={authors
+             .map((author) => author.url)
+             .filter(Boolean)
+             .join(',')}
+         />
+       )}
+       {tags.length > 0 && (
+         <meta
+           property="article:tag"
+           content={tags.map((tag) => tag.label).join(',')}
+         />
+       )}
+     </PageMetadata>
+   );
+ }
+ 
+ function BlogPostPageContent(props: Props): JSX.Element {
    const {content: BlogPostContents, sidebar} = props;
-   const {
-     // TODO this frontmatter is not validated/normalized, it's the raw user-provided one. We should expose normalized one too!
-     frontMatter,
-     assets,
-     metadata,
-   } = BlogPostContents;
-   const {title, description, nextItem, prevItem, date, tags, authors} =
-     metadata;
+   const {assets, metadata} = BlogPostContents;
+   const {nextItem, prevItem, frontMatter} = metadata;
    const {
      hide_table_of_contents: hideTableOfContents,
-     keywords,
      toc_min_heading_level: tocMinHeadingLevel,
      toc_max_heading_level: tocMaxHeadingLevel,
    } = frontMatter;
-
-   const {siteConfig} = useDocusaurusContext();
- 
-   const image = assets.image ?? frontMatter.image;
- 
    return (
      <BlogLayout
-       wrapperClassName={ThemeClassNames.wrapper.blogPages}
-       pageClassName={ThemeClassNames.page.blogPostPage}
        sidebar={sidebar}
        toc={
          !hideTableOfContents &&
@@ -53,33 +76,6 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
            />
          ) : undefined
        }>
-       <Seo
-         // TODO refactor needed: it's a bit annoying but Seo MUST be inside BlogLayout
-         // otherwise  default image (set by BlogLayout) would shadow the custom blog post image
-         title={title}
-         description={description}
-         keywords={keywords}
-         image={image}>
-         <meta property="og:type" content="article" />
-         <meta property="article:published_time" content={date} />
- 
-         {/* TODO double check those article metas array syntaxes, see https://ogp.me/#array */}
-         {authors.some((author) => author.url) && (
-           <meta
-             property="article:author"
-             content={authors
-               .map((author) => author.url)
-               .filter(Boolean)
-               .join(',')}
-           />
-         )}
-         {tags.length > 0 && (
-           <meta
-             property="article:tag"
-             content={tags.map((tag) => tag.label).join(',')}
-           />
-         )}
-       </Seo> 
        <BlogPostItem
          frontMatter={frontMatter}
          assets={assets}
@@ -87,7 +83,8 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
          isBlogPostPage>
          <BlogPostContents />
        </BlogPostItem>
-      <InnerHTML html={`
+ 
+       <InnerHTML html={`
       <script src="https://giscus.app/client.js"
         data-repo="ben-xD/orth.uk-comments"
         data-repo-id="R_kgDOGjNfow"
@@ -103,6 +100,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
         async>
       </script>
       `} />
+
        {(nextItem || prevItem) && (
          <BlogPostPaginator nextItem={nextItem} prevItem={prevItem} />
        )}
@@ -110,5 +108,15 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
    );
  }
  
- export default BlogPostPage;
- 
+ export default function BlogPostPage(props: Props): JSX.Element {
+   return (
+     <HtmlClassNameProvider
+       className={clsx(
+         ThemeClassNames.wrapper.blogPages,
+         ThemeClassNames.page.blogPostPage,
+       )}>
+       <BlogPostPageMetadata {...props} />
+       <BlogPostPageContent {...props} />
+     </HtmlClassNameProvider>
+   );
+ }
