@@ -1,15 +1,15 @@
 ---
-title: 'Replacing Cloudflare Tunnels with Tailscale SSH'
+title: 'Replacing SSH over Cloudflare with Tailscale'
 authors: ben
 slug: 'tailscale-ssh'
-description: 'I originally used Cloudflare Tunnels to SSH into machines at home from other networks, but Tailscale has a much easier product to use.'
+description: 'I originally used Cloudflare Tunnel to SSH into machines at home from other networks, but Tailscale has a much easier product to use.'
 tags:
   - tailscale
   - ssh
   - cloudflare
 ---
 
-# Replacing Cloudflare Tunnels with Tailscale SSH
+# Replacing SSH over Cloudflare with Tailscale
 
 I wrote [SSH into your private machines from anywhere, for free, using Cloudflare Tunnel](/ssh-over-cloudflare) in April which led to a lot of discussion on [Hacker News](https://news.ycombinator.com/item?id=30283987). A lot of people started mentioning alternatives (Tailscale, ZeroTier and issues with Cloudflare).
 
@@ -20,7 +20,7 @@ I wrote [SSH into your private machines from anywhere, for free, using Cloudflar
 Tailscale has a beta product, [Tailscale SSH](https://tailscale.com/tailscale-ssh/) with 2 significant differences:
 
 - **Easier setup:** Tailscale SSH is easy to configure (I don't really need to write the setup steps).
-- **Less security**: Cloudflare Tunnels didn't replace authentication, but Tailscale SSH does. This means Tailscale could SSH (and access files) into my machine if they wanted to, but Cloudflare can't. With Cloudflare, I still had to authenticate with my private key.
+- **Less security**: Cloudflare Tunnel didn't replace authentication, but Tailscale SSH does. This means Tailscale could SSH (and access files) into my machine if they wanted to, but Cloudflare can't. With Cloudflare, I still had to authenticate with my private key.
 
 ## Steps 🛼
 
@@ -54,6 +54,6 @@ Tailscale has a beta product, [Tailscale SSH](https://tailscale.com/tailscale-ss
 
 ## Conclusion 🏁
 
-Overall, I think I'm going to stick to Tailscale instead of Cloudflare Tunnels for accessing machines on my home network when away.
+Overall, I think I'm going to stick to Tailscale instead of Cloudflare Tunnel for accessing machines on my home network when away.
 
 **Question:** what would you do? 😇
