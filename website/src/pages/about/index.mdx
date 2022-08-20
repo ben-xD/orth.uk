@@ -11,16 +11,16 @@ I am a software engineer who makes things for work and fun [(personal projects)]
 - **help others learn** - especially the ones who love learning, **and**
 - **solve problems for people** - especially by understanding things and making them simpler.
 
-I've worked with mobile platforms, runtimes and programming languages for mobile app development, SDK development and machine learning. 
-This includes developing backend APIs for mobile apps. 
+I've worked with backend applications, including protobufs, gRPC and deploying them using Docker, Kubernetes and Helm.
+I've worked with mobile platforms, runtimes and programming languages for mobile app development, SDK development and machine learning. I've also worked in backend roles specifically for mobile API development.
 I received dean’s list and distinction for degrees in computer science and engineering at Imperial College. 
 I also communicate well: I write hundreds of Stack Overflow answers (and questions 🙈), give technical talks, and most importantly: discuss, debate and listen openly to others.
 I started programming in 2017 when I lived in a house with ~25 other students in the USA, some of who interned at Microsoft, Google, venture capitalists and startups. Since then, I haven't really stopped programming, learning and helping others.
-For mobile development, I use Flutter. For backend development, I'll usually use Typescript, NodeJS, relational databases. 
+I've been product-led before university, by performing the role of product manager and designer -  some of my contributions can be found in hotel rooms around the world, and in the back of camping vehicles in Australia. 
 I have a list [down below](#tech) which shows the type of stuff I've worked with.
 Take a look at my [projects](/projects).
 
-Do you need help with a **Flutter app**? Do you need a servant leader to **boost engineering productivity**? Or are you at the beginning of your career and want to **accelerate your learning and growth**? I'd be honoured to help, [get in touch](#contact).
+Do you need help with software engineering? Do you need a servant leader to **boost engineering productivity**? Or are you at the beginning of your career and want to **accelerate your learning and growth**? I'd be honoured to help, [get in touch](#contact).
 
 ### Feedback 📈 {#feedback}
 
@@ -68,8 +68,9 @@ I am vegan 🥕, love animals 🐕 and this planet 🌏 (nature, outdoors, cycli
 
 ### Technologies I have used (recent first) 🤖 {#tech}
 
-I actually started off as an (unpaid) product designer, not an engineer or programmer. Some of my contributions can be found in hotel rooms around the world, and in the back of camping vehicles in Australia 😅. However, in 2017 I learnt the impact possible from ones bedroom is amplified through programming. I haven't stopped programming since.
+I've used a lot of tools to solve problems, so I can usually pick things up quite quickly. My [CV](#links) has specific achievements in organisations I've worked for.
 
+- **More Python:** I've done a lot more Python work in my job. This is where I realised Python can be done better than the way I did, predominantly by using mypy + type hints and writing unit/integration tests. However, in the end, these "type hints" are just hints, they're **not** types. It is also where I came up against Python's limitations in it's threading model - thread prioritisation. Optimising Python code (e.g. using Numba) can also make it unmaintanable, introducing deployment issues (e.g. it only works on `amd64`) and unreadable code (complexity, annotations, magic).
 - **[Flutter](https://flutter.dev/)**, [**iOS**](https://developer.apple.com/) and [**Android**](https://developer.android.com/): I've used Flutter since 2020, but I worked on a Flutter package, [ably_flutter](https://github.com/ably/ably-flutter) containing a lot of Android and iOS code. It was nice to learn some Objective-C, but I've already begun the migration to Swift 😂. Recently, I've added push notification support, allowing users to register the device for push notifications, and handle everything on the Dart side without writing native code: handling foreground messages, background messages and notification taps / app launches. This was more complicated than expected, since I had to launch a Flutter Engine when the message arrives on Android. 
 - **[Three.js](https://threejs.org/), [NextJS](https://nextjs.org/)/[React](https://reactjs.org/), WebSockets/[Ably](https://ably.com/), [MediaPipe](https://www.mediapipe.dev/), [TailwindCSS](https://tailwindcss.com/):** I learnt these while making [Club2d](/club2d), an anonymous video calling app.
 - **iOS (Swift) and Android:** Android and iOS development are both enjoyable in their own ways. I've also built a macOS CLI tool for colleagues, some prototype apps using CoreML (iOS) and Tensorflow Lite (Android). I've been compiling a list of differences which I'll publish soon. Currently working on an iOS library for Ably. I've also touched a small bit Objective-C, though I highly recommend you stick to Swift if possible.
@@ -83,16 +84,18 @@ I actually started off as an (unpaid) product designer, not an engineer or progr
 - 🥰 **Javascript throughout 2019:** learning javascript basics and writing scripts in my free time
 - 😡 **Java for 7 months in early 2019:** As part of on-boarding at Ocado & day to day programming. I didn't enjoy Java. Maybe it was because of the enterprise programming & boilerplate.
 - 😃 **Python & Javascript & NodeJS for 6 months in late 2018:** Self-taught to make web apps. Finally, I was actually programming. In reality I was just following tutorials and could not make anything myself... So much for [deliberate practice](https://jamesclear.com/deliberate-practice-theory).
-- My first real tool I learnt was **Adobe Photoshop & Illustrator**, mostly to draw illustrations and posters. I started when I was 11.
 - 🙂 **Python for about 6 months.**
   - in 2017: Self-taught to do data analysis for simulation results
   - in 2018: Self-taught for final year project data analysis for simulation results
 - **Matlab for about 3 months 😭 in 2014, 2015, 2016...**
   - ...in undergraduate Matlab courses, and several simulation projects. I really did not enjoy Matlab, and know many students who were scared away from programming because of it. Do yourself a favour, don't touch that thing. Use the right tool for the job: in Science, that's Python now, not Matlab.
+- My first real tool I learnt was **Adobe Photoshop & Illustrator**, mostly to draw illustrations and posters. I started when I was 11.
 
 ### Devops related platforms I have used (recent first) 💸 {#devops-tech}
 
+- Gitlab and Github CI/CD: writing CI/CD jobs, including templates used by many other projects.
 - Docker and Docker Compose - writing Dockerfiles for CI, development machines and deployments at work.
+- Kubernetes, Helm, Spinnaker
 - Firebase & GCP - Mobile app backend as a service (authentication, database, cloud functions), including Firebase security rules and application threat modeling.
 - Doc Cloud: The Imperial College Department of Computing Cloud. It's got limitations no amount of money can circumvent. Might be a good thing for my wallet.
 - Netlify, Vercel, Cloudflare Pages - hosting my blog and other small web app projects
