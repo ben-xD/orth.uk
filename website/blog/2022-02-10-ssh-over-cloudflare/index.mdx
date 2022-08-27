@@ -41,7 +41,9 @@ So I used `cloudflared` to do this, but realised there was no guide written that
     - Reminder: edit `example.com` to one you have added on Cloudflare, and update `machine` to whatever you prefer. `cloudflared` will create a CNAME record called `machine.example.com`.
 - SSH into your machine using password based authentication: run `ssh username@machine.example.com`
     - Reminder: Update username and host.
+
 ## Configure the `cloudflared` service 🧑‍💻
+
 - We want this service to be running all the time (*daemon*), not just when I run the command. Also, some of the steps in [Cloudflare: Run as a service](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/run-tunnel/run-as-service) are broken.
 - Create a tunnel: `cloudflared tunnel create $tunnel_name`, where `$tunnel_name` is a name you can use to reference it.
 - Update a DNS record: `cloudflared tunnel route dns $tunnel_id phanteks.orth.uk`
@@ -51,10 +53,11 @@ tunnel: $tunnel_id
 credentials-file: /home/$user/.cloudflared/$tunnel_id.json
 url: ssh://localhost:22
 ```
-- Run the tunnel: `cloudflared tunnel run --url=ssh://localhost:22$  $tunnel_name
+- Run the tunnel: `cloudflared tunnel run --url=ssh://localhost:22 $tunnel_name`
 - Install service: `sudo cloudflared --config /home/ben/.cloudflared/config.yml service install`
 - Start service: run `sudo systemctl start cloudflared`
 - Schedule service (to start on machine start-up): `sudo systemctl enable cloudflared`
+
 ## Configure SSH client 💻
 - Create a keypair. The private key is for your client and the public key should be given to anyone who wants to authenticate you (the machine you want to SSH to, *Phanteks*). My keypair is called `phanteks`(private key) and `phanteks.pub` (public key): 
     - Run `ssh-keygen`. Before that, preferably `cd ~/.ssh`, so that your generated keys are stored there.
