@@ -35,6 +35,7 @@ So I used `cloudflared` to do this, but realised there was no guide written that
     - **Start service**: run `sudo systemctl start ssh`
     - **Schedule service** (to start on machine start-up): `sudo systemctl enable ssh`
 - For other operating systems, try using search engines.
+
 ## Quick check: setup a tunnel and SSH 🧪
 - This step is just a quick check that you can SSH into the machine, before you waste time configuring stuff.
 - Start a cloudflare tunnel: run `cloudflared tunnel --hostname machine.example.com --url ssh://localhost:22`

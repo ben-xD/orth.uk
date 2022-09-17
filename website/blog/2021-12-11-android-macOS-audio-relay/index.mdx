@@ -36,7 +36,9 @@ You want to play music or app sounds on your Android device on your macOS, and
 
 - Download the sndcpy APK and script from [rom1v/sndcpy on GitHub](https://github.com/rom1v/sndcpy), and place them in `/usr/local/bin`
 
-  - Unzip the file downloaded from Github and move them using `sudo mv -t /usr/local/bin ~/Downloads/sndcpy/sndcpy ~/Downloads/sndcpy/sndcpy.apk`
+  - Unzip the file downloaded from Github and move them using
+    - `sudo mv ~/Downloads/sndcpy/sndcpy /usr/local/bin`, and
+    - `sudo mv ~/Downloads/sndcpy/sndcpy.apk /usr/local/bin`
   - This APK is installed to your android device whenever you run `sndcpy`
 
 - Create a script called `vlc` in `/usr/local/bin` by running `sudo vim /usr/local/bin/vlc`, and passing the following content:
