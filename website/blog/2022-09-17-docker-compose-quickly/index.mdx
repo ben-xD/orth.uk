@@ -1,0 +1,92 @@
+---
+title: 'Docker Compose, quickly'
+authors: ben
+slug: 'docker-compose-quickly'
+description: 'This is a *quick, practical guide* to get you started with using Docker Compose, locally.'
+tags:
+  - docker
+  - docker-compose
+  - backend
+---
+# Docker Compose, quickly
+This is a *quick, practical guide* to get you started. A common issue I notice in projects that use `Dockerfile`'s is that they don't easily run on developer machines and don't work across operating systems and IDEs (Visual Studio Code, vs. PyCharm, vs. Command line). 
+
+<!--truncate-->
+
+## Why Docker? 😋
+- **Consistent environment:** 
+    - Some binaries and applications might not be able to run your platform natively. Fortunately, Apple ARM macs (e.g. M1/M2) already allow you to run `amd64`/`x86_64` binaries thanks to Rosetta 2. However, you still can't run `linux/arm64` or `linux/amd64` on macOS. You still can't run ARM binaries on older, `x86_64` macs. **With Docker, you can run binaries from other architectures more easily,** thanks to QEMU emulation.
+    - Environment variables are not automatically passed to the docker image or container.
+- **Clean environment:**
+    - whenever I want a clean environment to test in, I find myself spawning a docker container and entering it's shell: `docker run -it python:3.9-bullseye bash`. This makes me more confident when helping colleagues or writing articles.
+- **Powerful build:** you can **compile docker images** for other platforms on your machine. Without Docker, how can you build applications or binaries for Linux?
+- Many more benefits. This is a *quick* guide. 😉
+## Steps 🚶🏻
+- Do all the steps in your project directory. See https://github.com/ben-xD/docker-compose-guide for an example.
+### Create a `Dockerfile` for your application
+- Writing a `Dockerfile` is very specific to the application you want to deploy, so I won't include that here. It can also get quite complex. In the example, we use a basic `Dockerfile.
+- You'll need to copy over your application.
+### Create a `docker-compose.yml` file
+- This should contain:
+```yaml
+services:
+  development:
+    build:
+      context: "./"
+      dockerfile: Dockerfile
+      args:
+      # Optional credentials used during image build.
+       - USERNAME
+       - TOKEN
+    env_file:
+     - .env
+    command: "tail -f /dev/null"
+    # Specify a platform if some of your binaries only work on certain platforms. e.g. linux/amd64, linux/arm64
+    # platform: linux/amd64 
+    volumes:
+     - .:/workspace
+```
+### If you need credentials when building your image:
+#### Create a `.env`
+- The `.env` file should contain all the credentials in your `args`
+#### Add `.env` to `.gitignore`
+- Ignore this file, because it will contain your credentials.
+#### Create a `.env.example`
+- Copy your `.env` and remove the credentials.
+- Keep this up to date whenever your `.env changes`
+### Create VSCode devcontainer configuration
+- Even if you don't use VSCode, another developer might want in the future. Create one now so you configure it correctly 😆. 
+    - We don't want developer environment to drift or become inconsistent between Visual Studio Code users and others. Unfortunately, `devcontainers` defaults to configuring things inside `devcontainers.json` this can easily happen.
+- install "Remote - Containers" extension from Microsoft.
+- Open Command Palette, run "Remote-Container: Add Development Container Configuration Files..."
+- **Delete** `devcontainer/docker-compose.yml`
+- Inside `.devcontainer/devcontainer.json`, 
+    - use only 1 docker-compose file: 
+```json
+{
+    ...
+    "dockerComposeFile": ["../docker-compose.yml"],
+}
+```
+- Add a warning to the top of `.devcontainer/devcontainer.json`:
+```json
+// WARNING: developers should put most configuration in docker-compose.yml instead of VSCode specific configuration to ensure all developer environments work, not just VSCode.
+```
+### Try launching the application
+- From the command line, run `docker-compose up -d --build`
+- Enter the shell inside the container: `docker exec -it docker-compose-guide_development_1 bash`
+    - This command won't need to change everything you build the image or restart your computer.
+    - That name should be consistent to the folder name and the service inside `docker-compose.yml`. If you change those, you'll need to update this command.
+- Run a command, you're in Linux: e.g. run `uname -a`
+    - This should return `Linux eed70de56bc9 5.10.104-linuxkit #1 SMP PREEMPT aarch64 GNU/Linux`
+### Write the documentation
+- Describe what you need to do to launch the application locally.  Take a look at the example [Contributing guide](https://github.com/ben-xD/docker-compose-guide#contributing).
+## More reading 👀
+- **Useful images:** If you need **more functionality in your Docker image**, [you could write `Dockerfiles`](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/). Try to find [existing Docker images](https://hub.docker.com/) that do most of your needs, and extend from there. 
+- **Lightweight images:** If you need to **deploy a lightweight version of your image**, you could build **multi-stage docker files**. These are slower, but can be better for deployment because they smaller and more locked down. For this reason, I like to provide 2 `Dockerfile`'s, one for release, and one for local development. Backstage, by Spotify does something similar in [Building a Docker image](https://backstage.io/docs/deployment/docker).
+- **Deployment:** If you need to deploy your application to a [Kubernetes](https://kubernetes.io/) cluster, you could look at [Helm](https://helm.sh/). If you want even more advanced deployments, take a look at [ArgoCD](https://argo-cd.readthedocs.io/en/stable/).
+    - **Warning:** Please don't go into the wormhole of using all the tools available to you today, as it will add the complexity of your project. Use it when you need it.
+## Conclusion 🏁
+That was a quick guide to using Docker compose locally. I'll be happy to clarify things and point to more resources. Some tricky things for me were to:
+- setup Gitlab authenticate with a private Container Registry so that it would use the image when running CI commands. You need to generate a `DOCKER_AUTH_CONFIG` Gitlab environment variable.
+- Building complex existing tools together with my application (e.g. Ardupilot simulator/SITL) in the same Docker image. This is useful for running integration tests of your application communicating with the drone simulator.
