@@ -1,3 +1,4 @@
+
 /**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
@@ -5,57 +6,27 @@
  * LICENSE file in the root directory of this source tree.
  */
 
- import React from 'react';
+ import React, {type ReactNode} from 'react';
  import clsx from 'clsx';
- import {
-   PageMetadata,
-   HtmlClassNameProvider,
-   ThemeClassNames,
- } from '@docusaurus/theme-common';
+ import {HtmlClassNameProvider, ThemeClassNames} from '@docusaurus/theme-common';
+ import {BlogPostProvider, useBlogPost} from '@docusaurus/theme-common/internal';
  import BlogLayout from '@theme/BlogLayout';
  import BlogPostItem from '@theme/BlogPostItem';
  import BlogPostPaginator from '@theme/BlogPostPaginator';
+ import BlogPostPageMetadata from '@theme/BlogPostPage/Metadata';
  import TOC from '@theme/TOC';
  import type {Props} from '@theme/BlogPostPage';
  import InnerHTML from 'dangerously-set-html-content'
+ import type {BlogSidebar} from '@docusaurus/plugin-content-blog';
  
- function BlogPostPageMetadata(props: Props): JSX.Element {
-   const {content: BlogPostContents} = props;
-   const {assets, metadata} = BlogPostContents;
-   const {title, description, date, tags, authors, frontMatter} = metadata;
-   const {keywords} = frontMatter;
-   const image = assets.image ?? frontMatter.image;
-   return (
-     <PageMetadata
-       title={title}
-       description={description}
-       keywords={keywords}
-       image={image}>
-       <meta property="og:type" content="article" />
-       <meta property="article:published_time" content={date} />
-       {/* TODO double check those article meta array syntaxes, see https://ogp.me/#array */}
-       {authors.some((author) => author.url) && (
-         <meta
-           property="article:author"
-           content={authors
-             .map((author) => author.url)
-             .filter(Boolean)
-             .join(',')}
-         />
-       )}
-       {tags.length > 0 && (
-         <meta
-           property="article:tag"
-           content={tags.map((tag) => tag.label).join(',')}
-         />
-       )}
-     </PageMetadata>
-   );
- }
- 
- function BlogPostPageContent(props: Props): JSX.Element {
-   const {content: BlogPostContents, sidebar} = props;
-   const {assets, metadata} = BlogPostContents;
+ function BlogPostPageContent({
+   sidebar,
+   children,
+ }: {
+   sidebar: BlogSidebar;
+   children: ReactNode;
+ }): JSX.Element {
+   const {metadata, toc} = useBlogPost();
    const {nextItem, prevItem, frontMatter} = metadata;
    const {
      hide_table_of_contents: hideTableOfContents,
@@ -66,24 +37,17 @@
      <BlogLayout
        sidebar={sidebar}
        toc={
-         !hideTableOfContents &&
-         BlogPostContents.toc &&
-         BlogPostContents.toc.length > 0 ? (
+         !hideTableOfContents && toc.length > 0 ? (
            <TOC
-             toc={BlogPostContents.toc}
+             toc={toc}
              minHeadingLevel={tocMinHeadingLevel}
              maxHeadingLevel={tocMaxHeadingLevel}
            />
          ) : undefined
        }>
-       <BlogPostItem
-         frontMatter={frontMatter}
-         assets={assets}
-         metadata={metadata}
-         isBlogPostPage>
-         <BlogPostContents />
-       </BlogPostItem>
+       <BlogPostItem>{children}</BlogPostItem>
  
+ {/* This is the only modification I made to https://github.com/facebook/docusaurus/blob/main/packages/docusaurus-theme-classic/src/theme/BlogPostPage/index.tsx, to add comments */}
        <InnerHTML html={`
       <script src="https://giscus.app/client.js"
         data-repo="ben-xD/orth.uk-comments"
@@ -109,14 +73,19 @@
  }
  
  export default function BlogPostPage(props: Props): JSX.Element {
+   const BlogPostContent = props.content;
    return (
-     <HtmlClassNameProvider
-       className={clsx(
-         ThemeClassNames.wrapper.blogPages,
-         ThemeClassNames.page.blogPostPage,
-       )}>
-       <BlogPostPageMetadata {...props} />
-       <BlogPostPageContent {...props} />
-     </HtmlClassNameProvider>
+     <BlogPostProvider content={props.content} isBlogPostPage>
+       <HtmlClassNameProvider
+         className={clsx(
+           ThemeClassNames.wrapper.blogPages,
+           ThemeClassNames.page.blogPostPage,
+         )}>
+         <BlogPostPageMetadata />
+         <BlogPostPageContent sidebar={props.sidebar}>
+           <BlogPostContent />
+         </BlogPostPageContent>
+       </HtmlClassNameProvider>
+     </BlogPostProvider>
    );
  }
