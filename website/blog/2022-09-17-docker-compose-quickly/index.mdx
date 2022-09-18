@@ -83,9 +83,10 @@ services:
 ### Write the documentation
 - Describe what you need to do to launch the application locally.  Take a look at the example [Contributing guide](https://github.com/ben-xD/docker-compose-guide#contributing).
 ## More reading 👀
-- Docker images don't have the Linux kernel in them, they share the one from the Host. Running Docker on macOS is more resource intensive than on a Linux host, because 
+- Docker images don't have the Linux kernel in them, they share the one from the Host. Running Docker on macOS is more resource intensive than on a Linux host, because it needs to run a Linux kernel. More information on this [Stack Overflow answer](https://stackoverflow.com/a/55085366/7365866).
 - Every Docker image eventually extends from `scratch`. For example, the [Debian `bullseye` image](https://github.com/debuerreotype/docker-debian-artifacts/blob/8b767b40652eff693130e3364e8636e1e1cd1e53/bullseye/Dockerfile) is actually pretty simple. It does 1 thing: copy and extract the root file system (33.4MB) into the container:
   - The root file system provides **a lot**, you can download it from [Github](https://github.com/debuerreotype/docker-debian-artifacts/blob/8b767b40652eff693130e3364e8636e1e1cd1e53/bullseye/Dockerfile), extract it and take a look. 
+  - More information on this [Stack Overflow answer](https://stackoverflow.com/a/47374705/7365866).
 ```
 FROM scratch
 ADD rootfs.tar.xz /
