@@ -7,6 +7,7 @@ tags:
   - docker
   - docker-compose
   - backend
+draft: false
 ---
 # Docker Compose, quickly
 This is a *quick, practical guide* to get you started. A common issue I notice in projects that use `Dockerfile`'s is that they don't easily run on developer machines and don't work across operating systems and IDEs (Visual Studio Code, vs. PyCharm, vs. Command line). 
@@ -82,6 +83,14 @@ services:
 ### Write the documentation
 - Describe what you need to do to launch the application locally.  Take a look at the example [Contributing guide](https://github.com/ben-xD/docker-compose-guide#contributing).
 ## More reading 👀
+- Docker images don't have the Linux kernel in them, they share the one from the Host. Running Docker on macOS is more resource intensive than on a Linux host, because 
+- Every Docker image eventually extends from `scratch`. For example, the [Debian `bullseye` image](https://github.com/debuerreotype/docker-debian-artifacts/blob/8b767b40652eff693130e3364e8636e1e1cd1e53/bullseye/Dockerfile) is actually pretty simple. It does 1 thing: copy and extract the root file system (33.4MB) into the container:
+  - The root file system provides **a lot**, you can download it from [Github](https://github.com/debuerreotype/docker-debian-artifacts/blob/8b767b40652eff693130e3364e8636e1e1cd1e53/bullseye/Dockerfile), extract it and take a look. 
+```
+FROM scratch
+ADD rootfs.tar.xz /
+CMD ["bash"]
+```
 - **Useful images:** If you need **more functionality in your Docker image**, [you could write `Dockerfiles`](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/). Try to find [existing Docker images](https://hub.docker.com/) that do most of your needs, and extend from there. 
 - **Lightweight images:** If you need to **deploy a lightweight version of your image**, you could build **multi-stage docker files**. These are slower, but can be better for deployment because they smaller and more locked down. For this reason, I like to provide 2 `Dockerfile`'s, one for release, and one for local development. Backstage, by Spotify does something similar in [Building a Docker image](https://backstage.io/docs/deployment/docker).
 - **Deployment:** If you need to deploy your application to a [Kubernetes](https://kubernetes.io/) cluster, you could look at [Helm](https://helm.sh/). If you want even more advanced deployments, take a look at [ArgoCD](https://argo-cd.readthedocs.io/en/stable/).
