@@ -1,0 +1,99 @@
+---
+title: 'Alternative Cargo Registry authentication workaround'
+authors: ben
+slug: 'cargo-registry-authentication'
+description: 'This is a workaround to authenticating with alternative cargo registries like Artifactory, a feature that is not yet available in Cargo.'
+tags:
+  - cargo
+  - rust
+draft: false
+---
+# Cargo Registry authentication workaround
+This is a workaround to authenticating with an *alternative* cargo registry like Artifactory, a feature that is not yet available in Cargo.
+<!--truncate-->
+## Introduction 👋
+- There has been a [Cargo MR: Implement RFC 3139: alternative registry authentication support](https://github.com/rust-lang/cargo/pull/10592), to add support to Cargo to authenticate with Registries when downloading crates. Currently, Cargo only sends authentication tokens for publish and yank network requests. Unfortunately, this MR has been open quite a while - since April 2022.
+- **Workaround:** This workaround works by injecting a basic authentication token to requests to the specific cargo registry.
+- **Background:** I noticed a colleague implementing a workaround using [proxy.py](https://pypi.org/project/proxy.py/). However, this tool might be more versatile, so it requires more config for MITM proxying, including generating certificate authorities and programatically mutating config files. I knew of `mitmproxy` which could potentially do things a bit more cleanly, and was a bit curious how it would work with Cargo. I also knew this attempt would be more open-source-able.
+## Pause: easier solution 🐣
+- There is an even easier solution.
+- If your crates are not sensitive, you could just disable authentication when downloading crates. There is an option to do this for Jfrog Artifactory repositories (for artifactory admins).
+## Setup ⚙️
+*These are setup instructions. You only do this once per machine. They are written for macOS so adjust them for other platforms if necessary.*
+- **Pre-requisites:** Rust and Cargo: `brew install rust`
+- [Install mitmproxy](https://docs.mitmproxy.org/stable/overview-installation/): run `brew install mitmproxy`
+    - This installs `mitmproxy`, `mitmdump` and more.
+    - Note, you can also `python3 -m pip install mitmproxy`, which installs binaries in e.g. `/Users/$USER/Library/Python/3.9/lib`. Be sure to add this to your path.  For example, in `~/.zshrc`, add `export PATH=/Users/$USER/Library/Python/3.9/lib:$PATH`
+- Run `mitmproxy`, and close it: run `mitmproxy` and then quit: `Ctrl + C`, type `yes`
+    - This will generate the certificate authority certificates in `~/.mitmproxy`.
+- Create a file: `add_cargo_auth_header.py` is:
+```python
+from mitmproxy import http
+import base64
+import os
+
+REGISTRY_DOMAIN = "example.jfrog.io"
+
+def request(flow: http.HTTPFlow):
+    if flow.request.pretty_host == REGISTRY_DOMAIN:
+        # If you prefer hardcoding your email and token in your script. This is okay if you don't commit your file
+        email = "user@example.com"
+        token = "replace this with your token"
+        
+        # Or if you prefer environment variables.
+        email = os.environ["EMAIL"]
+        token = os.environ["TOKEN"]
+        
+        encoded_token = base64.b64encode(f"{email}:{token}".encode())
+        flow.request.headers["Authorization"] = b"Basic " + encoded_token
+
+    # Optional: Handle more registries here.
+```
+- Configure cargo to use your registry and this proxy
+    - Adjust your desired config file, to use the **mitmproxy** certificate authority. 
+        - To affect a single project, adjust `.cargo/config.toml`. For more information, see [The Cargo Book: Configuration](https://doc.rust-lang.org/cargo/reference/config.html#hierarchical-structure).
+        - For example, update your `.cargo/config.yaml` to look like:
+            - This example uses an "Jfrog Artifactory" Cargo registry.
+```toml
+[registries.example]
+index = https://example.jfrog.io/artifactory/git/cargo-repository.git
+
+[http]
+proxy = "localhost:9001"
+# on macOS
+cainfo = "/Users/$USER/.mitmproxy/mitmproxy-ca.pem"
+# in a Docker container
+cainfo = "/root/.mitmproxy/mitmproxy-ca.pem"
+
+[net]
+git-fetch-with-cli = true
+```
+- Authenticate with the Registry index
+    - The index contains the information about all crates
+    - Warning: update `EMAIL` and `INDEX_DOMAIN`.
+```bash
+# Replace @ with %40
+EMAIL=user@example.com
+REGISTRY_DOMAIN=example.jfrog.io/
+SAFE_EMAIL=${EMAIL/@/%40}
+git config --global url."https://${SAFE_EMAIL}:${TOKEN}@/${REGISTRY_DOMAIN}".insteadOf "https://${REGISTRY_DOMAIN}"
+```
+## Usage 🎮
+- Start the local proxy server: either
+    - for interactive: run `mitmproxy --listen-port 9001 -s add_cargo_auth_header.py`
+    - for no interactivity: run `mitmdump --listen-port 9001 -s add_cargo_auth_header.py`
+        - You can replace `9001` with whichever port you prefer.
+- Launch cargo as normal in a separate terminal. e.g. `cargo build`, `cargo run`, etc.
+## Bonus: Usage in CI 🎁
+- To use it programatically (e.g. in CI), you could run:
+```bash
+# Start proxy server
+mitmdump --listen-port 9001 -s add_cargo_auth_header.py &
+# Use cargo as normal
+cargo build # or cargo update, cargo run, etc.
+# Kill proxy server
+kill %1
+```
+## Conclusion 🏁
+- I look forward to deleting this local proxy server when this feature is available in Cargo. In the mean time, I've got a consistent way to access other registries securely.
+- If you have a suggestion or found a problem, comment below. That would probably be useful to other readers, and also helps me learn.
