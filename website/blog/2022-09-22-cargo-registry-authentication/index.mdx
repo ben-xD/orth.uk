@@ -53,7 +53,7 @@ def request(flow: http.HTTPFlow):
     - Adjust your desired config file, to use the **mitmproxy** certificate authority. 
         - To affect a single project, adjust `.cargo/config.toml`. For more information, see [The Cargo Book: Configuration](https://doc.rust-lang.org/cargo/reference/config.html#hierarchical-structure).
         - For example, update your `.cargo/config.yaml` to look like:
-            - This example uses an "Jfrog Artifactory" Cargo registry.
+            - This example uses an "Jfrog Artifactory" Cargo registry. Be sure to update the cainfo file path
 ```toml
 [registries.example]
 index = https://example.jfrog.io/artifactory/git/cargo-repository.git
@@ -61,9 +61,9 @@ index = https://example.jfrog.io/artifactory/git/cargo-repository.git
 [http]
 proxy = "localhost:9001"
 # on macOS
-cainfo = "/Users/$USER/.mitmproxy/mitmproxy-ca.pem"
+cainfo = "/Users/ben/.mitmproxy/mitmproxy-ca.pem"
 # in a Docker container
-cainfo = "/root/.mitmproxy/mitmproxy-ca.pem"
+# cainfo = "/root/.mitmproxy/mitmproxy-ca.pem"
 
 [net]
 git-fetch-with-cli = true
