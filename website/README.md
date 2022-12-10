@@ -10,3 +10,16 @@ Comments are stored in GitHub issues using [giscus](https://giscus.app/) in a se
 - Deployed with [Cloudflare Pages](https://pages.cloudflare.com/), on the free tier.
 - Commenting system is [giscus](https://giscus.app/), which uses GitHub discussions to store comments. If I want to enable comments on any page, just add `isCommentsEnabled: true` to the YAML frontmatter. I previously used [Utterances](https://github.com/utterance/utterances`), but switched to giscus for more features (like page reactions).
 - DNS records managed on Cloudflare DNS.
+- For workshop slides:
+    - [Reveal.js](https://www.npmjs.com/package/reveal.js)
+    - Start the server as usual (`npm start`), and visit the link (e.g. `https://orth.uk/workshops/adding-offline-to-flutter` or localhost)
+- For codelabs:
+    - Install [claat](https://github.com/googlecodelabs/tools): run `go install github.com/googlecodelabs/tools/claat@latest`
+    - Create a markdown file following the standard [format](https://github.com/googlecodelabs/tools/tree/main/claat/parser/md)
+    - Make changes to codelab markdown file (e.g. `index.md`)
+    - Generate code: 
+        - `cd static/codelabs`
+        - run `claat export adding-offline-to-flutter/index.md`
+            - Don't run claat in the root directory, because it defaults to outputting to the current directory.
+    - Start the server as usual (`npm start`), and visit the link (e.g. https://orth.uk/codelabs/adding-offline-to-flutter or localhost)
+        - Alternatively, serve files using `claat serve adding-offline-to-flutter`
