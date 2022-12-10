@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Adding offline to Flutter</title>
+    <link rel="stylesheet" href="../../reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="../../reveal.js/dist/theme/white.css" id="theme">
+    <link rel="stylesheet" href="../../reveal.js/plugin/highlight/monokai.css">
+</head>
+
+<body>
+<div class="reveal">
+    <style type="text/css">
+        p, ul, li {
+            text-align: left;
+        }
+        .reveal ul {
+            display: block;
+        }
+
+        .reveal h2,
+        .reveal h3,
+        .reveal h4,
+        .reveal h5,
+        .reveal h6 {
+            text-transform: none;
+            text-align: left;
+        }
+    </style>
+    <div class="slides">
+        <section data-markdown="index.md"
+                 data-separator="^--h"
+                 data-separator-vertical="^--v"
+                 data-separator-notes="^Note:">
+        </section>
+    </div>
+</div>
+
+<script src="../../reveal.js/dist/reveal.js"></script>
+<script src="../../reveal.js/plugin/zoom/zoom.js"></script>
+<script src="../../reveal.js/plugin/notes/notes.js"></script>
+<script src="../../reveal.js/plugin/search/search.js"></script>
+<script src="../../reveal.js/plugin/markdown/markdown.js"></script>
+<script src="../../reveal.js/plugin/highlight/highlight.js"></script>
+<script>
+
+  // Also available as an ES module, see:
+  // https://revealjs.com/initialization/
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    center: true, // vertical centering
+    hash: true,
+    slideNumber: true,
+    controlsBackArrows: 'visible',
+
+    // Learn about plugins: https://revealjs.com/plugins/
+    plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight]
+  });
+
+</script>
+
+</body>
+
+</html>
