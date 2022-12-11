@@ -15,7 +15,7 @@ Dirr is a mobile app for [iOS](https://apps.apple.com/us/app/dirr/id6444596100) 
 
 ![Dirr screens](./dirr-ui.jpg)
 
-## Banananator, a ~~data~~ banana annotation app
+## Banananator, a ~~data~~ banana annotation app {#banana}
 
 A demo app built for a [workshop for adding offline support to Flutter](https://orth.uk/workshops/adding-offline-to-flutter-slides/). The app was built in a few days: it lets users upload photos to be annotated, and allows other users to annotate them by drawing bounding boxes. It's on [GitHub](https://github.com/ben-xD/bounding_box_annotation_flutter), and runs on all platforms: Web, Android, iOS, macOS, Windows and Linux. The client app was made in Flutter, and the backend was made using Cloudflare-related tools (Pages, Workers, R2, D1, [Hono](https://honojs.dev/docs/getting-started/cloudflare-workers/), the [Serverless-database/SQLite-on-the-edge currently in Alpha](https://blog.cloudflare.com/introducing-d1/)). The app costs me £0 to develop, and £0 to keep running. Try it on https://banananator.pages.dev. There are many things I would improve on:
 - Image resizing. Resize images in Cloudflare workers in WebAssembly instead of sending original images to each client.
