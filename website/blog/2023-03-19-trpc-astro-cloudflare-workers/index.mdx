@@ -18,10 +18,10 @@ I haven't seen if [Astro](https://astro.build/), tRPC and Cloudflare Workers go 
 If you haven't heard of Cloudflare Workers, tRPC or Astro, read this. Otherwise, skip to [2 options](#2-options).
 - **Cloudflare Workers:** cheap but fast serverless platform that integrates Cloudflare's other services: SQLite on the edge (D1), S3-alternative with zero egress fees (R2) and WebSockets (durable objects, also used by [DriftDB](https://news.ycombinator.com/item?id=34639728)).
 - **tRPC** lets you *call your backend like you call functions*. It's similar to gRPC, but without the code generation headache that comes with it. When using gRPC/protobufs, I've found the codegen to be a very complex area:
-    - There are multiple code generation tools for each language, with different features and bugs. They're not consistent. Not all features are implemented for each language.
-    - gRPC/protobuf code generation tools seem to be neglected.
-    - Code generation can be configured in different ways. This means the generated code is different and incompatible. Switching codegen tools to get their features (e.g. `google-protobuf/grpc-web` to `protobuf-ts`, or in Python: from `betterproto` to `grpcio_tools`) are major breaking changes. 
-    - *Warning:* Should tRPC even be used in Cloudflare Workers? It might have cold-start issues.
+  - There are multiple code generation tools for each language, with different features and bugs. They're not consistent. Not all features are implemented for each language.
+  - gRPC/protobuf code generation tools seem to be neglected.
+  - Code generation can be configured in different ways. This means the generated code is different and incompatible. Switching codegen tools to get their features (e.g. `google-protobuf/grpc-web` to `protobuf-ts`, or in Python: from `betterproto` to `grpcio_tools`) are major breaking changes. 
+  - *Warning:* Should tRPC even be used in Cloudflare Workers? It might have cold-start issues.
 ![[workers tRPC.png]]
 - I don't have these issues, and another discord user mentioned: 
 > Cold starts definitely play a part but it just sounds like the codes own initialisation
