@@ -102,10 +102,11 @@ However, Astro doesn't give you a way to call your APIs *from the browser* in a 
   - Simpler deployment. Your server-side code in `.astro` files run on the same service.
   - Single command to deploy
   - Hot-restart works well. Saving a file leads to the backend rebuilding, and the frontend refreshing. In the example, run `pnpm dev` to start the dev server.
-  - You can still call Cloudflare workers using Cloudflare Pages Functions's ["Service Bindings"](https://developers.cloudflare.com/pages/platform/functions/bindings/). Your cloudflare pages function can communicate with other workers without incurring network latency. This is because tRPC running on Cloudflare Workers uses the fetch API, which does not go over the network.
 - Negatives:
   - Larger bundle size. Your frontend and backend application (or part of it) is in the same cloudflare pages project.
-- Uses [Cloudflare Pages *Functions*](https://developers.cloudflare.com/pages/platform/functions), which is relatively new compared to Cloudflare Workers, so it has [some issues](https://developers.cloudflare.com/pages/platform/known-issues#enabling-access-on-your-pagesdev-domain). Deployed using Cloudflare Pages: `wrangler pages publish` (internally uses Cloudflare Workers)
+- Deployed using Cloudflare Pages: `wrangler pages publish` (internally uses Cloudflare Workers)
+- **Separation of concerns:** You can call other Cloudflare Workers from your Cloudflare Pages Function using ["Cloudflare Pages Functions Service Bindings"](https://developers.cloudflare.com/pages/platform/functions/bindings/#service-bindings). This does not incur network latency because tRPC running on Cloudflare Workers uses the fetch API, which does not go over the network.
+
 ### Complex option: Cloudflare Pages + Backend
 - This is approach is probably good if you've already got a backend. This backend can be Cloudflare Workers running tRPC, Hono, Express, any combination of these, or anything else (e.g. NodeJS). Consider tRPC's [Express.js adapter](https://trpc.io/docs/express) or [Hono adapter](https://www.npmjs.com/package/@hono/trpc-server) ([discussion](https://github.com/honojs/hono/issues/582)). This allows you to avoid Cloudflare Worker platform for server-side rendering.
 - Positives:
@@ -114,10 +115,10 @@ However, Astro doesn't give you a way to call your APIs *from the browser* in a 
   - Cloudflare Workers separate from frontend: Cloudflare Pages (which uses Workers internally)
     - This separation means they are separate workers:
       - more control over worker / features
-  - You can still use Service Bindings to communicate with other workers, without incurring network latency.
-  - Negatives:
-      - More complex maintenance. e.g. You need to setup monorepo tool to build backend code before frontend is built. When deploying a preview environment, you need to deploy the backend. The frontend needs to be pointed to the correct backend. Preview environments are not self-contained.
-  - Deployed as 1 Cloudflare Pages deployment, and 1 Cloudflare worker: `wrangler publish`
+- Negatives:
+    - More complex maintenance. e.g. You need to setup monorepo tool to build backend code before frontend is built. When deploying a preview environment, you need to deploy the backend. The frontend needs to be pointed to the correct backend. Preview environments are not self-contained.
+- Deployed as 1 Cloudflare Pages deployment, and 1 Cloudflare worker: `wrangler publish`
+- **Separation of concerns:** You can call other Cloudflare Workers using **Service Bindings**. This also does not incur network latency because tRPC running on Cloudflare Workers uses the fetch API, which does not go over the network.
 
 ## Summary 📒
 I'm currently using  **tRPC on Cloudflare Pages**. Let me know if you have any questions. I connect to other workers using Cloudflare Pages functions service bindings 🤓
