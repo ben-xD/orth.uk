@@ -124,3 +124,4 @@ I'm currently using  **tRPC on Cloudflare Pages**. Let me know if you have any q
 
 ## Other resources
 - [tRPC Pages Plugin](https://github.com/toyamarinyon/cloudflare-pages-plugin-trpc): for both options, you can use this plugin for some convenience (to get Cloudflare bindings to D1, R2, etc.).
+- Warning: Even though Jetbrain's Webstorm IDE has an Astro plugin, it looks like it doesn't support tRPC. For example, you cannot navigate to the implementation of a query/mutation (`getUserById: t.procedure.input(z.string())...`) from the astro file (`const user = await client.getUserById.query(userId);`).
