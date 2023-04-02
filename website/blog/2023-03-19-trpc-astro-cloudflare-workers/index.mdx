@@ -121,9 +121,23 @@ However, Astro doesn't give you a way to call your APIs *from the browser* in a 
 - **Separation of concerns:** You can call other Cloudflare Workers using **Service Bindings**. This also does not incur network latency because tRPC running on Cloudflare Workers uses the fetch API, which does not go over the network.
 
 ## Summary 📒
-I'm currently trying **tRPC with Astro, on Cloudflare Pages**, without using service bindings. Let me know if you have any questions.
+I'm currently trying **tRPC with Astro on Cloudflare Pages**, without a single Cloudflare Pages Function. That is to say, I only have 1 worker: a **fat worker**. Let me know if you have any questions.
 
 ## Other resources
 - [tRPC Pages Plugin](https://github.com/toyamarinyon/cloudflare-pages-plugin-trpc): for both options, you can use this plugin for some convenience (to get Cloudflare bindings to D1, R2, etc.).
-- Warning: When calling another worker (service bindings), you need to use the Cloudflare API, which means you lose type safety. tRPC does have [server-side calls](https://trpc.io/docs/server/server-side-calls), however that will call the same worker: it does not allow you to call other workers with different implementations. This means your worker would get large, and you lose "separation of concerns" between multiple workers.
+- Warning: When calling another worker (service bindings), you need to use the Cloudflare API, which means you lose end-to-end typing / benefit of tRPC. tRPC has [server-side calls](https://trpc.io/docs/server/server-side-calls), however that will not call another worker: it does not allow you to call workers with different implementations. This means you'd only have 1 worker, and it would get large. You lose "separation of concerns" between multiple workers.
+	- I initially thought: "Surely there's a way to get the benefits of both tRPC and Cloudflare Service bindings". 
+	- Edit: oh, see [tRPC with no latency or network errors](https://arjunyel.com/blog/trpc-service-bindings/). Thanks `arjunyel.com` - they did this to turn on Node compatibility just for the backend. However, IMHO if you don't need node compatibility, it doesn't make sense to do this unless you need to split your code across multiple workers - your worker bundle size might be too big (>1MB on free tier, >5MB on paid tier, or the size is affecting latency/start-up time). Or perhaps you have multiple teams and they want to deploy independently. It might get messy having multiple tRPC backends running and connecting to each other. I think tRPC being a backend framework where you can define all APIs *has tension with* splitting your backend into multiple workers/bundles. It's possible, but I'd recommend not doing it until performance or functionality is limited because of it.
+```typescript
+createTRPCProxyClient<AppRouter>({
+  links: [
+    httpBatchLink({
+      // Any URL will work since we are communicating with the worker directly
+      url: "https://www.example.com/trpc",
+      // Pass in the Service binding after binding it (lol)
+      fetch: env.BACKEND.fetch.bind(env.BACKEND),
+    }),
+  ],
+});
+```
 - Warning: Even though Jetbrain's Webstorm IDE has an Astro plugin, it looks like it doesn't support tRPC. For example, you cannot navigate to the implementation of a query/mutation (`getUserById: t.procedure.input(z.string())...`) from the astro file (`const user = await client.getUserById.query(userId);`).
