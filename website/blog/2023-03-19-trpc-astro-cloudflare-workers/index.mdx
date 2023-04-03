@@ -121,7 +121,7 @@ However, Astro doesn't give you a way to call your APIs *from the browser* in a 
 - **Separation of concerns:** You can call other Cloudflare Workers using **Service Bindings**. This also does not incur network latency because tRPC running on Cloudflare Workers uses the fetch API, which does not go over the network.
 
 ## Summary 📒
-I'm currently trying **tRPC with Astro on Cloudflare Pages**, without a single Cloudflare Pages Function. That is to say, I only have 1 worker: a **fat worker**. Let me know if you have any questions.
+I'm currently trying **tRPC with Astro on Cloudflare Pages**, with a single Cloudflare Pages Function. That is to say, I only have 1 worker: a **fat worker**. Let me know if you have any questions.
 
 ## Other resources
 - [tRPC Pages Plugin](https://github.com/toyamarinyon/cloudflare-pages-plugin-trpc): for both options, you can use this plugin for some convenience (to get Cloudflare bindings to D1, R2, etc.).
