@@ -1,0 +1,137 @@
+---
+title: "Cloudflare Worker's Bindings in tRPC"
+authors: ben
+slug: 'trpc-cloudflare-bindings'
+description: 'Getting cloudflare bindings (D1, R2, DO, KV, etc.) in tRPC.'
+tags:
+  - trpc
+  - cloudflare
+  - workers
+draft: false
+---
+# Cloudflare Worker's Bindings in tRPC 🧙‍♀️
+
+When using Cloudflare Workers, the main selling point is you can integrate with a lot of other Cloudflare APIs, like [D1](https://developers.cloudflare.com/workers/platform/storage-options/#d1) (database), [R2](https://developers.cloudflare.com/workers/platform/storage-options/#r2) (storage) and [Durable Objects](https://developers.cloudflare.com/workers/learning/using-durable-objects) (websockets), and more. However, there isn't any documentation on how to do that.
+<!--truncate-->
+
+The up-to-date way to implement Cloudflare Workers is by using the module workers syntax, as follows:
+
+```typescript
+export default {
+    async fetch(
+        request: Request,
+        env: Env, // 👈 not shown on the tRPC docs
+        ctx: ExecutionContext, // 👈 not shown on the tRPC docs
+    ): Promise<Response> {
+        return fetchRequestHandler({
+            endpoint: trpcApiPath,
+            req: request,
+            router: appRouter,
+            createContext,
+        });
+    },
+};
+```
+
+You get the `env` object here, allowing you to access cloudflare bindings. Often, examples won't include the 2nd and 3rd parameters of `fetch`, showing only `async fetch(request: Request): Promise<Response> {...}`. For example, the [tRPC docs](https://trpc.io/docs/server/adapters/fetch#create-cloudflare-worker).
+
+Actually, we just need to use `env` in `createContext`. Pretty simple. So let's try.
+
+## Use `env` in `createContext` 🐛
+
+The easiest option is to "inline" the `createContext` argument. However, this **won't** actually work because we need the `createContext` function to instantiate tRPC / appRouter: `const t = initTRPC.context<Context>().create();`, in another file. You might also get into a circular dependency hell.
+
+```typescript
+import { FetchCreateContextFnOptions, fetchRequestHandler } from '@trpc/server/adapters/fetch';
+import { appRouter } from './ts/trpc';
+import { trpcApiPath } from './ts/trpcPath';
+import { Env } from './ts/worker-configuration';
+import { drizzle } from 'drizzle-orm/d1';
+
+export default {
+    async fetch(
+        request: Request,
+        env: Env,
+        ctx: ExecutionContext
+    ): Promise<Response> {
+        return fetchRequestHandler({
+            endpoint: trpcApiPath,
+            req: request,
+            router: appRouter,
+            createContext: ({ req, resHeaders }: FetchCreateContextFnOptions) => 
+          			// 🎸 You have access to `env` here, so
+                // use a binding, for example: `env.SERVICE.fetch()`
+                const user = { name: req.headers.get('username') ?? 'anonymous' };
+                const db = drizzle(env.DB);
+                return { req, resHeaders, user, db };
+            },
+        });
+    },
+};
+```
+
+## Refactoring... it works. 😍
+
+```typescript
+// src/index.ts
+import { FetchCreateContextFnOptions, fetchRequestHandler } from '@trpc/server/adapters/fetch';
+import { appRouter } from './trpc/appRouter';
+import { trpcApiPath } from './trpc/trpcPath';
+import { Env } from './worker-configuration';
+import { createContext } from './trpc/context';
+
+export default {
+    async fetch(
+        request: Request,
+        env: Env,
+        ctx: ExecutionContext
+    ): Promise<Response> {
+        if (request.method === 'OPTIONS') {
+            const response = new Response(null, { status: 200, headers: { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "*" } });
+            return response
+        }
+
+        return fetchRequestHandler({
+            endpoint: trpcApiPath,
+            req: request,
+            router: appRouter,
+            createContext: (options: FetchCreateContextFnOptions) => createContext({ ...options, env, ctx }),
+        });
+    },
+};
+```
+
+```typescript
+// src/trpc/context.ts
+import { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
+import { Env } from './ts/worker-configuration';
+import { drizzle } from 'drizzle-orm/d1';
+
+const createContext = async ({
+    req,
+    env,
+    resHeaders,
+}: FetchCreateContextFnOptions & { env: Env, ctx: ExecutionContext }) => {
+    console.log(`Gotttt itt: ${env.MY_ENV_VAR}`);
+    // Now use a binding, for example: `env.SERVICE.fetch()`
+    const user = { name: req.headers.get('username') ?? 'anonymous' };
+    const db = drizzle(env.DB);
+    return { req, resHeaders, user, db };
+};
+
+export type Context = inferAsyncReturnType<typeof createContext>;
+```
+
+## Benefits 📈
+
+This approach:
+
+-  avoids a third party dependency
+- explains how to do it, so you can change it or extend it
+- so when the Cloudflare Worker's API changes in the future, your understanding can help you upgrade to the new API.
+- Avoids hijacking the Cloudflare "entry point", so you can still use the official way of defining a Cloudflare worker. For example, to use static assets, 
+- There is an alternative (a plugin, `cloudflare-pages-plugin-trpc`) which doesn't always work, for example when you're using Astro + tRPC + Cloudflare Workers. See it's [internals](https://github.com/toyamarinyon/cloudflare-pages-plugin-trpc/blob/main/packages/pages-plugin-trpc/functions/%5B%5Bpath%5D%5D.ts).
+
+## Conclusion
+
+I'd be interested to know what you're building, and how you're using tRPC and Cloudflare!
