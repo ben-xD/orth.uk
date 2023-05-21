@@ -1,0 +1,158 @@
+---
+title: "Serverless functions and edge databases"
+authors: ben
+slug: 'serverless-functions-and-edge-databases'
+description: 'What I learnt using serverless and edge databases.'
+tags:
+  - cloudflare
+  - workers
+  - serverless
+  - neon
+  - sqlite
+  - turso
+draft: false
+---
+# Serverless functions and edge databases
+
+Here are things I learnt when building applications using serverless functions (primarily Cloudflare Workers, previously GCP Functions) and edge/distributed databases (Turso, Cloudflare D1, Neon).
+<!--truncate-->
+
+This article isn't polished because I'm focused on building, not writing. Also, in the spirit of start ups, ship things and get feedback! I'll keep this article updated as I build more stateful personal projects.
+
+## Why did I even bother with serverless? 🧑‍🎓
+
+- **Low cost, and often generous free tier**
+  - Cloudflare even provides **serverless WebSockets** (using Websockets over Workers and Durable Objects). Unfortunately, this is **expensive**, up to $5 a month per shared state - for example each chat room can cost you up to $5 a month).
+- **Low latency / high performance:** if the runtime and database is managed, the service providers (e.g. Cloudflare, Vercel, AWS, etc.) can run code and keep data close to your users.
+- **DX Hype:** Lots of hype around new products, all screaming "great developer experience". Everything is managed...
+- **Curiosity:** It's exciting to learn about unconventional, futuristic infrastructure made by companies like Fly, Neon, Turso and Cloudflare.
+- **Run locally:** I assumed all these services would be easy to run locally, like any conventional architecture. Unfortunately, this is not the case. Ironic, given that these services are meant to run everywhere/on-the-edge.
+
+## What went wrong 🐩💩
+
+Almost everything I tried seemed to have rough edges.
+
+### Why not [Cloudflare D1](https://developers.cloudflare.com/d1)
+
+- **Not open:** 
+  - API access: I don't want to put my data into D1 because it is closed to Cloudflare. You cannot access it from Fly.io, GCP or others directly.
+  - Closed source
+- **Not distributed or replicated:** It's a single instance. During the alpha, the database was a single instance of SQLite in a specific datacenter in the US. Now, you can choose where this instance lives. However, there is no replication or sharding. Even in the future, I expect writes will all go to a single instance.
+- **Doesn't run locally:** For a while, this was not possible. There is no documentation about it and it is not listed in the [Miniflare features](https://github.com/cloudflare/miniflare#features). However, the older miniflare 2's help pages mentioned `--d1` and `--d1-persist`. Unfortunately, `miniflare`  CLI is deprecated, and it's only for `wrangler` to use now. Now it's not clear. After configuring miniflare and running a quick check, it looks like the `D1Database` binding tries to connect to the cloud D1 instance, and **freezes forever** - it doesn't time out.
+  - I turned the wifi on my laptop 5 minutes later and it connected and made the query. 😅
+  - If someone has a way of running D1 locally with the latest wrangler and miniflare (v3), let me know!
+
+- **Lagging DX:** In general, I find Cloudflare are really fast at releases new product lines (e.g. D1, R2, Queues, Constellation) but the developer experience is quite bad.
+- **Bad, unintuitive error handling:** To read the error message, you need to log it in a [specific, documented way](https://developers.cloudflare.com/d1/platform/client-api/#errors), otherwise you'll only see an unhelpful `D1_ERROR`.
+
+```typescript
+try {
+    await db.exec("INSERTZ INTO my_table (name, employees) VALUES ()");
+} catch (e: any) {
+    console.log({
+        message: e.message,
+        cause: e.cause.message,
+    });
+}
+```
+
+## Why not [Turso](https://turso.tech/) 🤖
+
+- Can't run Turso **locally** with Cloudflare Workers.
+  - `turso dev` is not maintained, so I needed to install `sqld` and use that instead. That also didn't work.
+  - "For now the best will be to just create a new database for development in the actual service." - CEO of ChiselStrike, who develop Turso.
+
+
+- **Fork** of SQLite means I hit some issues that wouldn't have been the case for SQLite, since there are protocols used for communication.
+- Can't **export/dump** data: https://github.com/chiselstrike/turso-cli/issues/433
+- *Thought:* I'll be willing to try Turso again once I can run it locally and behaves like a normal database.
+
+## Why not serverless functions, in general? 📈
+
+- APIs are **platform specific**. Examples:
+
+  - The serverless functions you wrote for AWS Lambda cannot just be run on Cloudflare Workers, since Workers doesn't use NodeJS. 
+  - This is extremely annoying when you find a bug and you want to switch to another service provider, but your code or your dependencies do not support another provider.
+  - This also means you have to learn how the service works.
+
+- **Restrictions and limitations:**
+
+  - for a long time, Cloudflare Workers had CPU limits of 50ms, even for paid users. This meant you couldn't even hash passwords with bcrypt. Workers still have a low memory limit, so I still struggled with image resizing in Cloudflare Workers recently.
+
+  - NextJS functions don't support WebSockets.
+
+  - Some have bad developer experience. For a long time, the only way to debug Cloudflare Workers was `console.log`, and this is described below. FWIW: this has improved with Miniflare, though I have had a lot of issues getting that to work.
+
+    - > Inserting **console.log lines throughout your code** can help you understand the state of your application in various stages until you reach the desired output. - [How to put breakpoints and debug Cloudflare Workers?](https://stackoverflow.com/questions/71378209/how-to-put-breakpoints-and-debug-cloudflare-workers), originally [Debugging Workers](https://developers.cloudflare.com/workers/learning/debugging-workers)
+
+- **Cold start time:** to be efficient, serverless services don't keep your application running all the time. This means it pays for the cost for launching your application on every request. It is only launched when a user makes a request, and might stay alive for some time, like a cache. 
+
+  - Example article: [Cal.com Cold Start Resolution](https://cal.com/blog/cal-com-cold-start-resolution-blog) - [HN comments](https://news.ycombinator.com/item?id=35963820)
+  - Cloudflare tries to avoid this by using a more efficient runtime that starts up quicker.
+  - In a conventional, non serverless system, you pay the startup cost once, and it is invisible to users, since requests will be routed to the older instance until the new one is ready. You might also have multiple instances.
+
+- Expensive: Often serverless functions are good for low and unpredictable loads. If it's predictable, you can autoscale to handle the load, and if the load is high, it's cheaper to have dedicated machines.
+
+- **Bad design:** passing data between serverless functions means copying data, and sometimes even running the same code multiple times (e.g. authorization checks). This takes time, and time is money for serverless functions (and users). If you had your logic in one application, your total execution time, CPU utilisation and memory utilisation is lower. Your bill will likely be higher if these are higher. AWS have shown they [reduced cost by 10x moving distributed serverless functions to a monolith one](https://www.primevideotech.com/video-streaming/scaling-up-the-prime-video-audio-video-monitoring-service-and-reducing-costs-by-90).
+
+- Overall, you trade old, solved problems for new problems that can be platform specific. 
+
+## Neon Postgres 🌟
+
+- Currently experimenting with Postgres, Neon.
+
+## Vercel Postgres
+
+- [Doesn't support drizzle yet.](https://vercel.com/docs/storage/vercel-postgres)
+- Probably uses Neon under the hood.
+
+## My chosen tech stack 🤔
+
+Still in progress... 🔨
+
+- Currently experimenting with Postgres, Neon.
+
+- If I want to connect multiple users with state and websockets, then use Fly.io/containers and use websockets as normal, as opposed to serverless and platform specific APIs.
+
+## Conclusion 👋
+
+- **Offline last:** Many serverless products have relatively bad developer experience even when the marketing sounds like you can "get X done in 5 minutes". Running things locally is pretty important for me, because it means I can work completely offline when travelling, and tests run very quickly.
+  - I wanted to run it locally since I've been taking flights and trains journeys with no internet, and sometimes am located in areas with really bad internet.
+- **Continuous improvement:** All the products I mentioned before I continuously improving, I look forward to building something using boring technology. See you in 2025, serverless SQLite databases.
+
+## 1 Question 👋
+
+Which serverless services would you recommend?
+
+
+## Bonus: Serverless WebSockets 💸
+
+- on Cloudflare:
+
+  - It is [expensive](https://community.cloudflare.com/t/is-my-understanding-of-the-websockets-pricing-model-correct/384366/2). See [discord message](https://discord.com/channels/595317990191398933/773219443911819284/1106601223194423326): "Its **$4.22/mo** for each DO (if active all month) not $5 per hour. But the  team has been working on a hibernation API that will sleep the durable  object if it isnt actively handling a message from a websocket. No clue  when that will actually come out but its been in talks the last few  months."
+
+  - It hasn't gotten cheaper over time. "They're working on improving pricing" has been suggested for more than a year. 
+
+    - See [discord message](https://discord.com/channels/595317990191398933/1108808908732121188/1108818978979184690): "in the past they have talked about making websockets not count as active time in order to make websocket pricing better which would mean  it can sleep. But I assume **if/when** that happens it will be a new API  specific to allowing the object to sleep with websocket connections but  we will find out whenever that happens if it does"
+
+  - It's not supported by popular backend frameworks in Node. e.g. [tRPC](https://trpc.io/), Fastify, express, [hono](https://hono.dev), or [itty-router](https://github.com/kwhitley/itty-router).
+
+  - It's a pretty confusing API. To actually get multiple clients connected together, there is only 1 paragraph of [documentation on Cloudflare](https://developers.cloudflare.com/workers/learning/using-websockets/#durable-objects-and-websocket-state):
+
+    - > If your application needs to coordinate among multiple WebSocket  connections, such as a chat room or game match, you will need to create a Durable Object so clients send messages to a  single-point-of-coordination. Durable Objects are a coordinated state tool for Cloudflare Workers, which are often used in parallel with WebSockets to persist state over multiple clients and connections. Refer to [Durable Objects](https://developers.cloudflare.com/workers/learning/using-durable-objects/) to get started.
+
+    - To optimise the cost, you could consider sharing a single durable objects between different "channels", but this adds to the mess. For example, the first approach is to create a durable object, and all clients connect to a worker which then connects to a durable object managing a single group chat. However, if you're a chat application, this doesn't scale with group chats, since each group chat would be ~$5/month. Instead, your durable object should handle multiple group chats. Oh, and keep in mind that if it does too much, it will [drop requests](https://developers.cloudflare.com/workers/learning/using-durable-objects#error-durable-object-is-overloaded): . Doesn't sound like it scales nicely.
+
+- on AWS Lambda
+
+  - It's possible
+  - Lock in: AWS only API
+  - I have not used it, so I can't say too much. I'm not interested in serious-lock-in products, especially the AWS ones.
+
+## Bonus: Why not Vitess
+
+- Vitess isn't really an edge database, but it is a sharded MySQL database used by Stripe, YouTube, Slack, GitHub and more.
+
+- Expensive: The first database is free, but the second is $29 a month. That's a sudden increase, that is not tied to **usage**. 🤔
+
+- I also don't have the problems of YouTube scale.
