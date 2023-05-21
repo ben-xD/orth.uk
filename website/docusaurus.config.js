@@ -21,14 +21,15 @@ const config = {
   ],
   presets: [
     [
-      'classic',
-      /** @type {import('@docusaurus/preset-classic').Options} */
-      ({
+      // docs: https://docusaurus.io/docs/using-plugins#docusauruspreset-classic
+      '@docusaurus/preset-classic',
+      {
         docs: false,
         // docs: {
         //   sidebarPath: require.resolve('./sidebars.js'),
         //   editUrl: 'https://github.com/ben-xD/orth.uk',
         // },
+        // docs: https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-pages#mdxPageComponent
         pages: {
           mdxPageComponent: path.resolve(__dirname, 'src/components/mdxPageComponent.tsx')
         },
@@ -41,17 +42,17 @@ const config = {
           // Please change this to your repo.
           editUrl:
             'https://github.com/ben-xD/orth.uk/blob/main/website',
+          // defaults to '@theme/BlogPostPage'
           blogPostComponent: path.resolve(__dirname, 'src/components/BlogPostPage.tsx')
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
-      }),
+      },
     ],
   ],
 
   themeConfig:
-    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
         title: 'Ben Butterworth',
@@ -67,9 +68,9 @@ const config = {
           //   position: 'left',
           //   label: 'Guides',
           // },
-          {to: '/about', label: 'About', position: 'left'},
-          {to: '/projects', label: 'Projects', position: 'left'},
-          {to: '/feedback', label: 'Feedback', position: 'left'},
+          { to: '/about', label: 'About', position: 'left' },
+          { to: '/projects', label: 'Projects', position: 'left' },
+          { to: '/feedback', label: 'Feedback', position: 'left' },
         ],
       },
       footer: {
