@@ -1,6 +1,6 @@
 ---
 title: My personal projects (newest first)
-slug: '/projects'
+slug: "/projects"
 ---
 
 ## Overview {#overview}
@@ -9,15 +9,24 @@ slug: '/projects'
 - **Learning style:** building projects, transitioning to books and videos when lack of knowledge slows me down enough.
 - **Habits:** learning and working on projects become automatic over time. Take a look at [Atomic Habits](https://jamesclear.com/atomic-habits) if you're interested in setting your life up with productive systems. Or sign up for a [weekly thought provoking newsletter](https://jamesclear.com/3-2-1/refer?rh_ref=f9f0797e).
 
+## TalkDash, a timer and messaging app {#talkdash}
+
+[TalkDash](https://talkdash.orth.uk/) is a timer app for events. Speakers see a large timer that expands to fill the window. Event hosts can send messages to speakers. You can tell speakers how much time they had left, and send messages to speakers without having to interrupt them or block the audience. I was previously showing my mobile phone to the speaker using an Android app, but it was too small and speaker couldn't see it.
+
+![Talkdash quick walkthrough](./talkdash.gif)
+
+On the tech side, I had fun playing with SolidJS, Solid Router, Tailwind, ARK UI, integrating tRPC with Fastify and using Cloudflare Workers AI. I also played with Typescript's `nodenext` config for `module` and `moduleResolution`, which requires relative imports end with `.js`. Free and [open source](https://github.com/ben-xD/talkdash).
+
 ## Dirr, a GPS, compass and orientation app {#dirr}
 
-[Dirr](https://dirr.orth.uk/) is a mobile app for [iOS](https://apps.apple.com/us/app/dirr/id6444596100) and [Android](https://play.google.com/store/apps/details?id=uk.orth.dirr), which allows you to save your location and orientation (compass, roll, pitch, yaw) locally. You can then share your saved data with others apps or people. This is a basic utility app which helps you collect location and phone orientation efficiently. It also renders a map of your location, so that you can ensure the compass is somewhat accurate. Supports light/dark mode, changing reference frames (ENU, NED), units (degrees, radians) and shortcuts to make things quicker (e.g. double tap the map to save). I spent some evenings and weekends in November 2022 to develop this app, using Flutter. *Warning:* the app may sometimes crash on launch on Android if you use the Mapbox map provider ([Github issue](https://github.com/flutter-mapbox-gl/maps/issues/1119)).
+[Dirr](https://dirr.orth.uk/) is a mobile app for [iOS](https://apps.apple.com/us/app/dirr/id6444596100) and [Android](https://play.google.com/store/apps/details?id=uk.orth.dirr), which allows you to save your location and orientation (compass, roll, pitch, yaw) locally. You can then share your saved data with others apps or people. This is a basic utility app which helps you collect location and phone orientation efficiently. It also renders a map of your location, so that you can ensure the compass is somewhat accurate. Supports light/dark mode, changing reference frames (ENU, NED), units (degrees, radians) and shortcuts to make things quicker (e.g. double tap the map to save). I spent some evenings and weekends in November 2022 to develop this app, using Flutter. _Warning:_ the app may sometimes crash on launch on Android if you use the Mapbox map provider ([Github issue](https://github.com/flutter-mapbox-gl/maps/issues/1119)).
 
 ![Dirr screens](./dirr-ui.jpg)
 
 ## Banananator, a ~~data~~ banana annotation app {#banana}
 
 A demo app built for a [workshop for adding offline support to Flutter](https://orth.uk/workshops/adding-offline-to-flutter-slides/). The app was built in a few days: it lets users upload photos to be annotated, and allows other users to annotate them by drawing bounding boxes. It's on [GitHub](https://github.com/ben-xD/bounding_box_annotation_flutter), and runs on all platforms: Web, Android, iOS, macOS, Windows and Linux. The client app was made in Flutter, and the backend was made using Cloudflare-related tools (Pages, Workers, R2, [Hono](https://honojs.dev/docs/getting-started/cloudflare-workers/), and D1, [Serverless-database/SQLite-on-the-edge currently in Alpha](https://blog.cloudflare.com/introducing-d1/)). Currently, the app costs £0 to keep running. Try it on [https://banananator.pages.dev](https://banananator.pages.dev). There are many things I would improve on:
+
 - Image resizing. Resize images in Cloudflare workers in WebAssembly instead of sending original images to each client.
 - Authentication and authorisation
 - Support any image mask shapes (free drawing or polygons) instead of just drawing bounding boxes.
@@ -28,13 +37,13 @@ A demo app built for a [workshop for adding offline support to Flutter](https://
 
 **Push** is a flutter package designed to handle push notifications - including background notification, alert notifications and notification taps. Users can avoid using Firebase on all platforms except Android - for example, on iOS, they can use APNs directly.
 
-<div style={{ textAlign: 'center' }}>
+<div style={{ textAlign: "center" }}>
   <iframe
-    width='600'
-    height='337'
-    src='https://www.youtube-nocookie.com/embed/wZ45n9-hjEc'
-    frameborder='0'
-    allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+    width="600"
+    height="337"
+    src="https://www.youtube-nocookie.com/embed/wZ45n9-hjEc"
+    frameborder="0"
+    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen
   ></iframe>
 </div>
@@ -47,7 +56,7 @@ A blog post about this is [here](/club2d). Club2D is an anonymous video calling 
 
 ## A physiotherapy app {#physio}
 
-When building an app, it's important you think about the user experience to make sure you build something useful and spend your time wisely. Here are 4 example screens I designed over a few hours using [Figma](https://www.figma.com/). 
+When building an app, it's important you think about the user experience to make sure you build something useful and spend your time wisely. Here are 4 example screens I designed over a few hours using [Figma](https://www.figma.com/).
 
 ![Physiotherapy screens](./physiotherapy-ui-1.png)
 
@@ -55,13 +64,13 @@ When building an app, it's important you think about the user experience to make
 
 Cheffresh is a Flutter app made during the 48 hour [Flutter International Hackathon 2020](https://flutterhackathon.com/), with 2500+ participants. ([GitHub](https://github.com/FreshOver/cheffresh))
 
-<div style={{ textAlign: 'center' }}>
+<div style={{ textAlign: "center" }}>
   <iframe
-    width='600'
-    height='337'
-    src='https://www.youtube-nocookie.com/embed/zl8voaFNOcE'
-    frameborder='0'
-    allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+    width="600"
+    height="337"
+    src="https://www.youtube-nocookie.com/embed/zl8voaFNOcE"
+    frameborder="0"
+    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen
   ></iframe>
 </div>
