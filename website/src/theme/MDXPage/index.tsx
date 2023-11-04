@@ -16,7 +16,7 @@ import Layout from "@theme/Layout";
 import MDXContent from "@theme/MDXContent";
 import TOC from "@theme/TOC";
 // CHANGED
-import { Giscus } from "@giscus/react";
+import Giscus from "@giscus/react";
 import type { Props } from "@theme/MDXPage";
 
 import styles from "./styles.module.css";
