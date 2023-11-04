@@ -1,1 +1,2 @@
 21.0.0
+# This is respected by Cloudflare Pages CI, as long as there is no NODE_VERSION environment variable set.
