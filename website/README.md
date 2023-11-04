@@ -9,6 +9,7 @@ Comments are stored in GitHub issues using [giscus](https://giscus.app/) in a se
 - Built using [Docusaurus](https://docusaurus.io/), which uses React.
 - Deployed with [Cloudflare Pages](https://pages.cloudflare.com/), on the free tier.
 - Commenting system is [giscus](https://giscus.app/), which uses GitHub discussions to store comments. If I want to enable comments on any page, just add `isCommentsEnabled: true` to the YAML frontmatter. I previously used [Utterances](https://github.com/utterance/utterances`), but switched to giscus for more features (like page reactions).
+  - Guidance on how to add these comments have been discussed a few times: https://madrus4u.com/blog/blog-comments, https://thedaxshepherd.net/2023/1/26/Docusaurus-Environment-Variables and https://m19v.github.io/blog/how-to-add-giscus-to-docusaurus.
 - DNS records managed on Cloudflare DNS.
 - For workshop slides:
     - [Reveal.js](https://www.npmjs.com/package/reveal.js)
