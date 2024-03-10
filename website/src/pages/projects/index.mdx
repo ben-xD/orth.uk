@@ -10,6 +10,16 @@ isCommentsEnabled: true
 - **Learning style:** building projects, transitioning to books and videos when lack of knowledge slows me down enough.
 - **Habits:** learning and working on projects become automatic over time. Take a look at [Atomic Habits](https://jamesclear.com/atomic-habits) if you're interested in setting your life up with productive systems. Or sign up for a [weekly thought provoking newsletter](https://jamesclear.com/3-2-1/refer?rh_ref=f9f0797e).
 
+## Geojsons, a GeoJSON editing app {#geojsons}
+
+[Geojsons.com](https://geojsons.com/) is a free app for editing GeoJSON intuitively. I modelled the interactions based on [Figma](https://www.figma.com/), [tldraw](https://www.tldraw.com/) and [excalidraw](https://excalidraw.com/). For example, switching tools using the keyboard, holding spacebar to drag the map, and undo/redo functionality which includes undoing/redoing _selections_ (not just changes).
+
+![Geojsons.com quick walkthrough](./geojsons.gif)
+
+Interesting tools that I learnt and used along the way include Zustand for state management, CodeMirror for a JSON editor, maplibre, deck.gl, and maptiler for maps, and nebula.gl for actually editing GeoJSON. I really really like [Zustand](https://github.com/pmndrs/zustand): I can still use Redux Devtools for debugging, I still have have one-way data flow like Redux/Flux, but without the added verbosity or complexity. My previous project, TalkDash used Solid.js signals, but my gut feeling is the explicit, single store is easier to reason about.
+
+One challenging thing to get right was the state synchronisation between my application's global store (Zustand), the map state (nebula/deck.gl's `GeojsonLayer`), and CodeMirror's state. Admittedly, the other hard thing about this project were some CSS issues related to scrolling inside resizable containers 😂️. I also contributed a [new mode to nebula.gl](https://github.com/uber/nebula.gl/pull/897).
+
 ## TalkDash, a timer and messaging app {#talkdash}
 
 [TalkDash](https://talkdash.orth.uk/) is a timer app for events with AI 🪄🦄. Speakers see a large timer that expands to fill the window. Event hosts can send messages to speakers. You can remind speakers to repeat audience's questions, how much time they had left, without interrupting them or blocking the audience. I was previously showing my mobile phone to the speaker using an Android app, but it was too small and speaker couldn't see it. It also has a timer and stopwatch.
