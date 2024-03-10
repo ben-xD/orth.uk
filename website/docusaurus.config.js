@@ -86,12 +86,12 @@ const config = {
               to: "/archive",
             },
             {
-              label: "Video Room",
-              to: "https://orth.uk/video",
-            },
-            {
               label: "Feedback",
               to: "/feedback",
+            },
+            {
+              label: "Support me",
+              to: "https://orth.uk/support",
             },
           ],
         },
