@@ -1,0 +1,49 @@
+---
+title: "Should I Close Source my Company? Replying to Supabase"
+authors: ben
+slug: "close-source"
+description: "I was reading Supabase's 'Should I Open Source my Company?', and wanted to add some nuance which might be useful for certain companies and industries."
+tags:
+  - open-source
+draft: false
+---
+
+# Should I Close Source my Company? Replying to Supabase
+
+## Overview
+
+I've been thinking about open source in the defence tech industry over the past few months. I was reading Supabase's [Should I Open Source my Company?](https://supabase.com/blog/should-i-open-source-my-company), and wanted to add some nuance which might be useful for certain companies and industries. First, there's even more benefits to build a company on open source, and would love to build an open source company. I would strongly prefer working on open source, all things being equal. *Unfortunately*, not all things are equal. For example, in the context of Russian invasion of Ukraine, innovations in Ukraine last between 3 to 6 months and we need to constantly innovate just to keep up. l'd hate to open source key technologies and reduce that window of advantage to adversaries who invade countries. 
+
+<!--truncate-->
+
+## Benefits
+
+- Developers get to use their code even after they leave the company. 
+- It commodises your competitors. Some of the capabilities that your competitors would have to reimplement. Of course, they might just be able to integrate your open source project, but there's often a cost with that, and it might've been cheaper for them to re-implement it. Now, customers can just use your open source project.
+- Marketing to customers. If you were a consulting company and published some popular devtools, you'll be top of mind when the users of the devtools need extra help.
+- I get to show my code to others, which helps with employment, branding, starting-a-startup and I think, developer street-cred.
+- The [supabase article](https://supabase.com/blog/should-i-open-source-my-company) has a lot more, I'm keeping it DRY
+
+## Challenges
+
+There are some circumstances where open source might be more difficult. Supabase avoids some challenges because:
+
+1. PaaS technology is iterative, not ground breaking: Supabase is a PaaS where there is a lot of competition and improvements are iterative. There is not much code that is "novel" (intellectual property someone ones to steal), it's just an iteration on existing software. Extremely novel systems (e.g. algorithms, e.g. path planning/scheduling algorithms) is unique/novel, and open sourcing that could mean a competitor improves their efficiency. There are plenty of companies that have already come and done something similar. Please tell me something if I am wrong here.
+2. open source is a marketing strategy that works when selling to developers. If Supabase was the first PaaS in the world, they'd probably get customers even if they weren't open source. Closed-source Firebase already exists, and plenty of other open source ones too. This works doubly well when developer-focused articles/memes are written about open source. Preaching to the choir. 
+3. Supabase is in a mericrocratic industry. Developers are knowledgeable and decide which platforms to use. Some industries are extremely sketchy, where customers have no idea which product is better. They may just choose the biggest brand name. If that brand name can tick a box (implements novel algorithm), many customers will choose that big brand name over the original creators of the tool.
+4. Competitors respect licensing. The competitors of Supabase are actually large cloud companies, who have highly paid, respectful engineers who would not accept code theft or license violations. When customers don't care or won't find out about licensing. If the market has an arms race. This is probably why Llama is not open source, it's open weights (don't sue me, Zuck!).
+5.  the (self-)hosting aspect of Supabase is actually difficult, and can change at any time. This is not because of Supabase "evil" intentions - it's because that is what they keep closed source.
+6. Supabase does not open source *everything*. I'll let the users or maintainers of Supabase add more detail here (they're an incredibly honest, knowledgeable and open team)
+7. The Supabase team develops Supabase. It's not a project where the community is in control.
+
+## Summary
+
+**TLDR:** think about what type of industry you're in, the customers you have and how that affects theft, license violation or simply legal copying. If open source, consider broadcasting your status by writing many articles about it. Also, don't prioritise self hosting documentation, just focus on your users - that is the priority (this is not malicious, it's business). Think about the value that a competitor will get by reading or copying your code, and hide some important bits. Then you can decide which parts of your company to open source without turning your for-profit into a charity or bankruptcy.
+
+This wasn't meant to be a dig at Supabase. I respect their product and the major bits they've open sourced. I know people who have worked there. I just want the other side of the story to be written down, from the perspective of someone who's worked in closed source, open source and then closed source again. I still try to open source certain things. 
+
+Disagree? Agree? Distasteful? Leave a comment!
+
+## Hiring fullstack engineers or web developers in Europe
+
+If you're interested in **modern web technology** (e.g. drizzle-orm 😉️) and aren't put off by **closed source or defence tech**, consider getting in contact with me at `rust-ion-rocking at duck.com` (relay email address courtesy of [duckduckgo extension](https://duckduckgo.com/duckduckgo-help-pages/desktop/chrome/)). Bonus points if you have open source projects. I do, like [push](https://pub.dev/packages/push) and [geojsons](https://geojsons.com/). We'll work on striking a balance between open and closed source whilst at work.
