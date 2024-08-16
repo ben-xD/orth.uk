@@ -12,29 +12,27 @@ draft: false
 
 ## Overview
 
-I've been thinking about open source in the defence tech industry over the past few months. I was reading Supabase's [Should I Open Source my Company?](https://supabase.com/blog/should-i-open-source-my-company), and wanted to add some nuance which might be useful for certain companies and industries. First, there's even more benefits to build a company on open source, and would love to build an open source company. I would strongly prefer working on open source, all things being equal. *Unfortunately*, not all things are equal. For example, in the context of Russian invasion of Ukraine, innovations in Ukraine last between 3 to 6 months and we need to constantly innovate just to keep up. l'd hate to open source key technologies and reduce that window of advantage to adversaries who invade countries. 
+I've been thinking about open source in the defence tech industry. I was reading Supabase's [Should I Open Source my Company?](https://supabase.com/blog/should-i-open-source-my-company), which highlights the benefits of building an open source company like Supabase. I wanted to add some nuance which might be useful for certain companies and industries. All things being equal, I would strongly prefer working on open source or running an open source company. Unfortunately, not all things are equal. For example, in the context of Russian invasion of Ukraine, innovations in Ukraine last between 3 to 6 months and we need to constantly innovate just to keep up. l'd hate to open source key technologies and reduce that window of advantage to adversaries who invade countries. 
 
 <!--truncate-->
 
 ## Benefits
 
 - Developers get to use their code even after they leave the company. 
-- It commodises your competitors. Some of the capabilities that your competitors would have to reimplement. Of course, they might just be able to integrate your open source project, but there's often a cost with that, and it might've been cheaper for them to re-implement it. Now, customers can just use your open source project.
-- Marketing to customers. If you were a consulting company and published some popular devtools, you'll be top of mind when the users of the devtools need extra help.
-- I get to show my code to others, which helps with employment, branding, starting-a-startup and I think, developer street-cred.
-- The [supabase article](https://supabase.com/blog/should-i-open-source-my-company) has a lot more, I'm keeping it DRY
+- It [commoditises your complement](https://gwern.net/complement). Some of the functionality that your competitors would have to reimplement are now commodities, where customers can more easily and cheaply get them. The value capture for a competitor to implement those features is now lower.
+- Marketing to customers. If you were a consulting company and published some popular open source devtools, you'll be top of mind when the users of the devtools need extra help.
+- You get to show your code to others, which helps with employment, branding, starting-a-startup and I think, developer street-cred (only between developers and only if the code is good 😂️).
+- The [supabase article](https://supabase.com/blog/should-i-open-source-my-company) has a lot more benefits, I'm keeping it DRY
 
 ## Challenges
 
 There are some circumstances where open source might be more difficult. Supabase avoids some challenges because:
 
-1. PaaS technology is iterative, not ground breaking: Supabase is a PaaS where there is a lot of competition and improvements are iterative. There is not much code that is "novel" (intellectual property someone ones to steal), it's just an iteration on existing software. Extremely novel systems (e.g. algorithms, e.g. path planning/scheduling algorithms) is unique/novel, and open sourcing that could mean a competitor improves their efficiency. There are plenty of companies that have already come and done something similar. Please tell me something if I am wrong here.
+1. PaaS technology is iterative, not ground breaking: Supabase is a PaaS where there is a lot of competition and improvements are iterative. There is not much code that is "novel" (intellectual property someone wants to steal), it's an iteration on existing software. Extremely novel systems (e.g. algorithms, e.g. path planning/scheduling algorithms) are unique/novel, and open sourcing them could mean a competitor improves their efficiency. Please tell me if I am wrong here.
 2. open source is a marketing strategy that works when selling to developers. If Supabase was the first PaaS in the world, they'd probably get customers even if they weren't open source. Closed-source Firebase already exists, and plenty of other open source ones too. This works doubly well when developer-focused articles/memes are written about open source. Preaching to the choir. 
-3. Supabase is in a mericrocratic industry. Developers are knowledgeable and decide which platforms to use. Some industries are extremely sketchy, where customers have no idea which product is better. They may just choose the biggest brand name. If that brand name can tick a box (implements novel algorithm), many customers will choose that big brand name over the original creators of the tool.
-4. Competitors respect licensing. The competitors of Supabase are actually large cloud companies, who have highly paid, respectful engineers who would not accept code theft or license violations. When customers don't care or won't find out about licensing. If the market has an arms race. This is probably why Llama is not open source, it's open weights (don't sue me, Zuck!).
-5.  the (self-)hosting aspect of Supabase is actually difficult, and can change at any time. This is not because of Supabase "evil" intentions - it's because that is what they keep closed source.
-6. Supabase does not open source *everything*. I'll let the users or maintainers of Supabase add more detail here (they're an incredibly honest, knowledgeable and open team)
-7. The Supabase team develops Supabase. It's not a project where the community is in control.
+3. it operates in a meritocratic industry. Developers are knowledgeable and decide which platforms to use. Some industries are extremely sketchy, where customers have no idea which product is better. They may just choose the biggest brand name. If that brand name can tick a box (implements novel algorithm), many customers will choose that big brand name over the original creators of the tool.
+4. Their industry respects licensing. PaaS competitors have highly paid, respectful engineers who would not accept code theft or license violations. Other companies like Elastic, Terraform, Meta have licenses that treat large companies differently. This would likely be respected by competitors who can compete effectively, such as AWS and Azure. In defence, someone told me "don't work with X or Y (billion dollar companies in defence) because they have a bad reputation of stealing ideas from startups or acquiring them to effectively shut them down." Supabase's license is very open, so this point is more for other companies.
+5.  the (self-)hosting and scaling aspect of Supabase is actually difficult, and can change at any time. This is not because of Supabase's "evil" intentions. Supabase does not open source *everything*. I'll let the users or maintainers of Supabase add more detail here if possible (they're an incredibly honest, knowledgeable and open team)
 
 ## Summary
 
